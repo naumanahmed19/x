@@ -1,0 +1,110 @@
+# This is a basic workflow to help you get started with Actions
+
+name: CI
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push or pull request events but only for the "main" branch
+  push:
+    branches: [ "private" ]
+  pull_request:
+    branches: [ "private" ]
+
+  # Allows you to run this workflow manually from the Actions tab
+      # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+    inputs:
+      branch:
+        default: "test"
+      flutterVersion:
+        description: 'Flutter Framework version'
+        required: true
+        default: '3.0.3'
+      appName:
+        description: 'App Name'
+        required: true
+        default: '' 
+      appBundleId:
+        description: 'Unique app bundle id'
+        required: true
+        default: '' 
+      appIcon:
+        description: 'Application Icon'
+        required: true
+        default: '' 
+      appSplashIcon:
+        description: 'Application Icon'
+        required: true
+        default: ''
+      appSplashColor:
+        description: 'Application Icon'
+        required: true
+        default: '#ffffff'  
+      
+      
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@master
+      with:
+        repository: naumanahmed19/mybrand-flutter
+        token: ${{ secrets.token }}
+        ref: android
+
+    - uses: actions/setup-java@v1
+      with:
+        java-version: '12.x'
+    - uses: subosito/flutter-action@v2.2.0
+      with:
+        flutter-version: '${{ github.event.inputs.flutter_version }}'
+    - run: flutter clean
+    - run: flutter pub get
+
+    
+    - name: Copy Assets from Url
+      run: |
+        curl -o assets/images/splash.png '${{ github.event.inputs.appSplashIcon }}'
+        curl -o assets/images/icon.png '${{ github.event.inputs.appIcon }}'
+
+
+    - name: Crate splash & Icon files
+      shell: bash
+      run: |
+        chmod +x ./bash-script.sh
+        param1=${{ github.event.inputs.appSplashColor }}
+        ./bash-script.sh "${param1}"
+         
+    - name: Update Splash & Icon
+      run: |    
+        flutter pub run flutter_native_splash:create f flutter_native_splash.yaml
+        flutter pub run flutter_launcher_icons:main f flutter_launcher_icons.yaml
+        
+
+    # Rename
+    - name: Update App Name and Package
+      run: |
+        flutter pub run rename --bundleId '${{ github.event.inputs.appBundleId }}'
+        flutter pub run rename --appname '${{ github.event.inputs.appName }}'
+
+
+    - name: Build App
+      run: |
+        flutter build apk --split-per-abi
+        
+           
+    #upload
+    - uses: shallwefootball/s3-upload-action@master
+      name: Upload to S3
+      id: S3
+      with:
+        aws_key_id: ${{ secrets.aws_key_id }}
+        aws_secret_access_key: ${{ secrets.aws_secret_access_key }}
+        aws_bucket: ${{ secrets.aws_bucket }}
+        source_dir: './build/app/outputs/flutter-apk'
+
+    # Show results
+    - name: s3 results
+      run: echo ${{steps.S3.outputs.object_key}},  ${{steps.S3.outputs.object_locations}}
+     
