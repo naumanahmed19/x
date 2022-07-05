@@ -64,16 +64,10 @@ jobs:
 
     
     - name: Copy Assets from Url
-      id: copy
       run: |
         curl -o assets/images/splash.png '${{ github.event.inputs.appSplashIcon }}'
         curl -o assets/images/icon.png '${{ github.event.inputs.appIcon }}'
-        echo steps.copy.outcome 
         
-    - name: copy  
-      if: steps.copy.outcome != 'success' 
-      run: exit 1
-
 
     - name: Crate splash & Icon files
       shell: bash
@@ -83,9 +77,11 @@ jobs:
         ./bash-script.sh "${param1}"
          
     - name: Update Splash & Icon
+      id: update_splash
       run: |    
         flutter pub run flutter_native_splash:create f flutter_native_splash.yaml
         flutter pub run flutter_launcher_icons:main f flutter_launcher_icons.yaml
+        echo ${{steps.update_splash.outcome }}
         
 
     # Rename
