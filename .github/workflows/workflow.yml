@@ -81,7 +81,7 @@ jobs:
       run: |    
         flutter pub run flutter_native_splash:create f flutter_native_splash.yaml
         flutter pub run flutter_launcher_icons:main f flutter_launcher_icons.yaml
-        echo ${{steps.update_splash.outcome }}
+        echo ourerror: ${{steps.update_splash.outcome }}
         
 
     # Rename
