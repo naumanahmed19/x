@@ -64,9 +64,15 @@ jobs:
 
     
     - name: Copy Assets from Url
+      id: copy
       run: |
         curl -o assets/images/splash.png '${{ github.event.inputs.appSplashIcon }}'
         curl -o assets/images/icon.png '${{ github.event.inputs.appIcon }}'
+        echo steps.copy.outcome 
+        
+    - name: copy  
+      if: steps.copy.outcome != 'success' 
+      run: exit 1
 
 
     - name: Crate splash & Icon files
