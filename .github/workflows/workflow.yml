@@ -118,8 +118,34 @@ jobs:
 
 
     - name: Build App
+      id: build
+      continue-on-error: true
       run: |
         flutter build apk --split-per-abi
+            
+    #  Send email
+    - name: Send mail
+      if: steps.build.outcome == 'failure'
+      uses: dawidd6/action-send-mail@v3
+      with:
+        # Required mail server address:
+        server_address: smtp.gmail.com
+        # Required mail server port:
+        server_port: 465
+        # Optional (recommended): mail server username:
+        username: ${{secrets.MAIL_USERNAME}}
+        # Optional (recommended) mail server password:
+        password: ${{secrets.MAIL_PASSWORD}}
+        # Required mail subject:
+        subject: XAPP - Build failed for ${{ github.event.inputs.appName }}
+        # Required recipients' addresses:
+        to: ${{ github.event.inputs.userEmail }}
+        # Required sender full name (address can be skipped):
+        from: Xapp # <Xapp@app.com>
+        # Optional whether this connection use TLS (default is true if server_port is 465)
+        secure: true
+        # Optional plain body:
+        body: Build faild! 
         
            
     #upload
