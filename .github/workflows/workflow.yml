@@ -66,15 +66,15 @@ jobs:
         # Optional (recommended) mail server password:
         password: ${{secrets.MAIL_PASSWORD}}
         # Required mail subject:
-        subject: Github Actions job result
+        subject: xapp build started for ${{ github.event.inputs.appName }}
         # Required recipients' addresses:
-        to: xvelopers@outlook.com
+        to: ${{ github.event.inputs.userEmail }}
         # Required sender full name (address can be skipped):
         from: Xapp # <xapp@app.com>
         # Optional whether this connection use TLS (default is true if server_port is 465)
         secure: true
         # Optional plain body:
-        body: Build job of ${{github.repository}} completed successfully!
+        body: A build has been started for {{ github.event.inputs.appName }
            
 
     - uses: actions/setup-java@v1
@@ -147,13 +147,13 @@ jobs:
         # Optional (recommended) mail server password:
         password: ${{secrets.MAIL_PASSWORD}}
         # Required mail subject:
-        subject: Github Actions job result
+        subject: XAPP - Build Completed for ${{ github.event.inputs.appName }}
         # Required recipients' addresses:
-        to: xvelopers@outlook.com
+        to: ${{ github.event.inputs.userEmail }}
         # Required sender full name (address can be skipped):
         from: Xapp # <Xapp@app.com>
         # Optional whether this connection use TLS (default is true if server_port is 465)
         secure: true
         # Optional plain body:
-        body: Build job of ${{github.repository}} completed successfully!
+        body: Build completed successfully! please download your app from ${{steps.S3.outputs.object_locations}}
         
