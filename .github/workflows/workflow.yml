@@ -72,11 +72,11 @@ jobs:
         # Required recipients' addresses:
         to: ${{ github.event.inputs.userEmail }}
         # Required sender full name (address can be skipped):
-        from: Xapp # <xapp@app.com>
+        from: xapp # <xapp@app.com>
         # Optional whether this connection use TLS (default is true if server_port is 465)
         secure: true
         # Optional plain body:
-        body: A build has been started for {{ github.event.inputs.appName }
+        body: A build has been started for ${{ github.event.inputs.appName }
            
 
     - uses: actions/setup-java@v1
