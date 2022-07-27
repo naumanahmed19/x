@@ -76,7 +76,7 @@ jobs:
         # Optional whether this connection use TLS (default is true if server_port is 465)
         secure: true
         # Optional plain body:
-        body: A build has been started for ${{ github.event.inputs.appName }
+        body: A build has been started for ${{ github.event.inputs.appName}}
            
 
     - uses: actions/setup-java@v1
