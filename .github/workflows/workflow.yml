@@ -40,7 +40,9 @@ on:
         description: 'Application Icon'
         required: true
         default: '#ffffff'  
-      
+      userEmail:
+        description: 'User email where we need to send information for steps'
+        required: true
       
 jobs:
   build:
