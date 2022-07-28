@@ -54,14 +54,28 @@ jobs:
         repository: naumanahmed19/mybrand-flutter
         token: ${{ secrets.token }}
         ref: android
-    
-    
+        
      #  Send email
     - name: Send mail
-      uses: naumanahmed19/x/.github/workflows/send-email.yml@android
+      uses: dawidd6/action-send-mail@v3
       with:
+        # Required mail server address:
+        server_address: smtp.gmail.com
+        # Required mail server port:
+        server_port: 465
+        # Optional (recommended): mail server username:
+        username: ${{secrets.MAIL_USERNAME}}
+        # Optional (recommended) mail server password:
+        password: ${{secrets.MAIL_PASSWORD}}
         # Required mail subject:
-        subject: Build started for ${{ github.event.inputs.appName }}
+        subject: xapp build started for ${{ github.event.inputs.appName }}
+        # Required recipients' addresses:
+        to: ${{ github.event.inputs.userEmail }}
+        # Required sender full name (address can be skipped):
+        from: xapp # <xapp@app.com>
+        # Optional whether this connection use TLS (default is true if server_port is 465)
+        secure: true
+        # Optional plain body:
         body: A build has been started for ${{ github.event.inputs.appName}}
            
 
@@ -80,7 +94,6 @@ jobs:
         curl -o assets/images/splash.png '${{ github.event.inputs.appSplashIcon }}'
         curl -o assets/images/icon.png '${{ github.event.inputs.appIcon }}'
         
-
     - name: Crate splash & Icon files
       shell: bash
       run: |
@@ -95,14 +108,11 @@ jobs:
         flutter pub run flutter_launcher_icons:main f flutter_launcher_icons.yaml
         echo ourerror: ${{steps.update_splash.outcome }}
         
-
     # Rename
     - name: Update App Name and Package
       run: |
         flutter pub run rename --bundleId '${{ github.event.inputs.appBundleId }}'
         flutter pub run rename --appname '${{ github.event.inputs.appName }}'
-
-
     - name: Build App
       id: build
       continue-on-error: true
