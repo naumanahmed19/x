@@ -87,7 +87,7 @@ jobs:
       with:
         url: ' https://beda-143-177-40-168.eu.ngrok.io/builds/${{ github.event.inputs.buildId }}'
         method: 'PATCH'
-        customHeaders: '{"Content-Type": "application/json" , "Authorization": "${{ secrets.XAPP_TOKEN }}"}'
+        customHeaders: '{"Content-Type": "application/json" , "Authorization": "Bearer ${{ secrets.XAPP_TOKEN }}"}'
         data: '{"status": "success", "buildFolder": ${{steps.S3.outputs.object_locations}}}'
         
 
