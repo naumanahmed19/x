@@ -80,7 +80,16 @@ jobs:
         secure: true
         # Optional plain body:
         body: A build has been started for ${{ github.event.inputs.appName}}
-           
+   
+   
+    - name: Update Build Status
+      uses: fjogeleit/http-request-action@v1
+      with:
+        url: ' https://beda-143-177-40-168.eu.ngrok.io/builds/${{ github.event.inputs.buildId }}'
+        method: 'POST'
+        customHeaders: '{"Content-Type": "application/json" , "Authorization": ${{ secrets.XAPP_TOKEN }}}'
+        data: '{"status": "success", "buildFolder": ${{steps.S3.outputs.object_locations}}}'
+        
 
     - uses: actions/setup-java@v1
       with:
