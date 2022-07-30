@@ -161,7 +161,7 @@ jobs:
     - name: Create app downlaoadable zip
       uses: montudor/action-zip@v0.1.0
       with:
-        args: zip -qq -r app.zip ./build/app/outputs/flutter-apk
+        args: zip -qq -r download/app.zip ./build/app/outputs/flutter-apk
     
     # Step 
 
@@ -181,7 +181,7 @@ jobs:
         aws_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
         aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws_bucket: ${{ secrets.AWS_BUCKET }}
-        source_dir: './app.zip'
+        source_dir: './download'
 
     # Show results
     - name: s3 results
