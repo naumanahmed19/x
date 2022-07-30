@@ -43,9 +43,6 @@ on:
       userEmail:
         description: 'User email where we need to send information for steps'
         required: true
-      buildId:
-        description: 'Build id'
-        required: true
       buildStatusCallBackUrl:
         description: 'Update a build status'
         required: true
