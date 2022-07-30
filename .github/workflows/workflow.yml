@@ -88,7 +88,7 @@ jobs:
         url: ' https://beda-143-177-40-168.eu.ngrok.io/builds/${{ github.event.inputs.buildId }}'
         method: 'PATCH'
         customHeaders: '{"Content-Type": "application/json" , "Authorization": "Bearer ${{ secrets.XAPP_TOKEN }}"}'
-        data: '{"status": "success", "buildFolder": "tex"}'
+        data: '{"status": "success", "zip": "tex"}'
         
 
     - uses: actions/setup-java@v1
@@ -155,6 +155,23 @@ jobs:
         # Optional plain body:
         body: Build faild! 
         
+    
+    #create zip
+    
+    - name: Create app downlaoadable zip
+      uses: montudor/action-zip@v0.1.0
+      with:
+        args: zip -qq -r app.zip ./build/app/outputs/flutter-apk
+    
+    # Step 
+
+    - run: cd ./build/app/outputs/
+    - run: ls
+    - run:  cd ./build/app/outputs/flutter-apk
+    - run: ls
+    
+    
+        
            
     #upload
     - uses: shallwefootball/s3-upload-action@master
@@ -164,7 +181,7 @@ jobs:
         aws_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
         aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws_bucket: ${{ secrets.AWS_BUCKET }}
-        source_dir: './build/app/outputs/flutter-apk'
+        source_dir: './build/app/outputs/flutter-apk/app.zip'
 
     # Show results
     - name: s3 results
@@ -176,9 +193,11 @@ jobs:
       uses: fjogeleit/http-request-action@v1
       with:
         url: ' https://beda-143-177-40-168.eu.ngrok.io/builds/${{ github.event.inputs.buildId }}'
-        method: 'POST'
-        customHeaders: '{"Content-Type": "application/json" , "Authorization": ${{ secrets.XAPP_TOKEN }}}'
-        data: '{"status": "success", "buildFolder": ${{steps.S3.outputs.object_locations}}}'
+        method: 'PATCH'
+        customHeaders: '{"Content-Type": "application/json" , "Authorization": "Bearer ${{ secrets.XAPP_TOKEN }}"}'
+        data: '{"status": "success", "zip": ${{steps.S3.outputs.object_locations}}}'
+        
+
      
      #  Send email
     - name: Send mail
