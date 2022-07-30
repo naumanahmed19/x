@@ -192,8 +192,7 @@ jobs:
         url: '${{ github.event.inputs.buildStatusCallBackUrl }}'
         method: 'PATCH'
         customHeaders: '{"Content-Type": "application/json" , "Authorization": "Bearer ${{ secrets.XAPP_TOKEN }}"}'
-        data: '{"workflowId": ${{ github.run_id }}, "status": "success"}'
-        
+        data: '{"status": "success","workflowId": "${{ github.run_id }}","files": "${{steps.S3.outputs.object_locations}}" }'
 
      
      #  Send email
@@ -227,4 +226,4 @@ jobs:
         url: '${{ github.event.inputs.buildStatusCallBackUrl }}'
         method: 'PATCH'
         customHeaders: '{"Content-Type": "application/json" , "Authorization": "Bearer ${{ secrets.XAPP_TOKEN }}"}'
-        data: '{"workflowId": ${{ github.run_id }}, "status": "failed"}'
+        data: '{"status": "failed","workflowId": "${{ github.run_id }}"}'
