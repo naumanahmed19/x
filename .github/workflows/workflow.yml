@@ -92,7 +92,7 @@ jobs:
         url: '${{ github.event.inputs.buildStatusCallBackUrl }}'
         method: 'PATCH'
         customHeaders: '{"Content-Type": "application/json" , "Authorization": "Bearer ${{ secrets.XAPP_TOKEN }}"}'
-        data: '{"status": "success"}'
+        data: '{"status": "success","workflowId": "${{ github.run_id }}"}'
         
 
     - uses: actions/setup-java@v1
