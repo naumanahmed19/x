@@ -163,16 +163,9 @@ jobs:
       with:
         args: zip -qq -r app.zip ./build/app/outputs/flutter-apk
     
-    # Step 
-    - run: mkdir download && mv app.zip ./download 
-    - run: cd ./build/app/outputs/
-    - run: ls
-    - run:  cd ./build/app/outputs/flutter-apk
-    - run: ls
+  
     
-    
-        
-           
+      
     #upload
     - uses: shallwefootball/s3-upload-action@master
       name: Upload to S3
@@ -181,7 +174,7 @@ jobs:
         aws_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
         aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws_bucket: ${{ secrets.AWS_BUCKET }}
-        source_dir: './download'
+        source_dir: './build/app/outputs/flutter-apk'
 
     # Show results
     - name: s3 results
@@ -195,7 +188,7 @@ jobs:
         url: ' https://beda-143-177-40-168.eu.ngrok.io/builds/${{ github.event.inputs.buildId }}'
         method: 'PATCH'
         customHeaders: '{"Content-Type": "application/json" , "Authorization": "Bearer ${{ secrets.XAPP_TOKEN }}"}'
-        data: '{"status": "success", "zip": ${{steps.S3.outputs.object_locations}}}'
+        data: '{"workflowId": ${{ github.run_id }}, "status": "success", "files": ${{steps.S3.outputs.object_locations}}}'
         
 
      
