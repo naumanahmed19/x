@@ -161,10 +161,10 @@ jobs:
     - name: Create app downlaoadable zip
       uses: montudor/action-zip@v0.1.0
       with:
-        args: zip -qq -r download/app.zip ./build/app/outputs/flutter-apk
+        args: zip -qq -r app.zip ./build/app/outputs/flutter-apk
     
     # Step 
-
+    - run: mkdir download && mv app.zip ./download 
     - run: cd ./build/app/outputs/
     - run: ls
     - run:  cd ./build/app/outputs/flutter-apk
