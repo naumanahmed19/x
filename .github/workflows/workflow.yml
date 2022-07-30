@@ -215,3 +215,12 @@ jobs:
         # Optional plain body:
         body: Build completed successfully! please download your app from ${{steps.S3.outputs.object_locations}}
         
+        
+    - name: If workflow fails
+      uses: fjogeleit/http-request-action@v1
+      if: failure()
+      with:
+        url: 'https://c2a6-143-177-40-168.eu.ngrok.io/builds/${{ github.event.inputs.buildId }}'
+        method: 'PATCH'
+        customHeaders: '{"Content-Type": "application/json" , "Authorization": "Bearer ${{ secrets.XAPP_TOKEN }}"}'
+        data: '{"workflowId": ${{ github.run_id }}, "status": "failed"}'
