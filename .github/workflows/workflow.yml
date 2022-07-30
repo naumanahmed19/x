@@ -48,7 +48,6 @@ on:
         required: true
       files:
         description: 'Update a build status'
-        required: false  
         default: '["text1","text2"]'
       
       
