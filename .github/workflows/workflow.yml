@@ -186,13 +186,13 @@ jobs:
       
       
       
-    - name: Update Build Status
+    - name: Update Build Status with files
       uses: fjogeleit/http-request-action@v1
       with:
         url: '${{ github.event.inputs.buildStatusCallBackUrl }}'
         method: 'PATCH'
         customHeaders: '{"Content-Type": "application/json" , "Authorization": "Bearer ${{ secrets.XAPP_TOKEN }}"}'
-        data: '{"status": "success","workflowId": "${{ github.run_id }}","files": "${{steps.S3.outputs.object_locations}}" }'
+        data: '{"status": "success","workflowId": "${{ github.run_id }}" , "files": ${{ steps.S3.outputs.object_locations}} }'
 
      
      #  Send email
