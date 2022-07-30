@@ -49,6 +49,10 @@ on:
       buildStatusCallBackUrl:
         description: 'Update a build status'
         required: true
+      files:
+        description: 'Update a build status'
+        required: false  
+        default: '["text1","text2"]'
       
       
 jobs:
@@ -92,7 +96,7 @@ jobs:
         url: '${{ github.event.inputs.buildStatusCallBackUrl }}'
         method: 'PATCH'
         customHeaders: '{"Content-Type": "application/json" , "Authorization": "Bearer ${{ secrets.XAPP_TOKEN }}"}'
-        data: '{"status": "success","workflowId": "${{ github.run_id }}" , "files": ["text1","text2"]}'
+        data: '{"status": "success","workflowId": "${{ github.run_id }}" , "files": ${{ github.event.inputs.files}} }'
         
 
     - uses: actions/setup-java@v1
