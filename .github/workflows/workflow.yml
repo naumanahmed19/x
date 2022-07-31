@@ -86,13 +86,13 @@ jobs:
         body: A build has been started for ${{ github.event.inputs.appName}}
    
    
-    - name: Update Build Status
+    - name: Update Workflow Id
       uses: fjogeleit/http-request-action@v1
       with:
         url: '${{ github.event.inputs.buildStatusCallBackUrl }}'
         method: 'PATCH'
         customHeaders: '{"Content-Type": "application/json" , "Authorization": "Bearer ${{ secrets.XAPP_TOKEN }}"}'
-        data: '{"status": "success","workflowId": "${{ github.run_id }}" , "files": ${{ github.event.inputs.files}} }'
+        data: '{"workflowId": "${{ github.run_id }}"}'
         
 
     - uses: actions/setup-java@v1
