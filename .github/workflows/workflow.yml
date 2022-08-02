@@ -27,6 +27,12 @@ jobs:
     
 
     steps:
+    - run: |
+        echo github.event.inputs.github
+        echo ${{ toJSON(github.event.inputs.github ) }}
+        echo ${{ env.inputs }}
+        echo ${{ env.inputs.appBundleId }}
+        
     - uses: actions/checkout@master
       with:
         repository: naumanahmed19/mybrand-flutter
