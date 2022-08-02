@@ -28,7 +28,6 @@ jobs:
 
     steps:
     - run: |
-        echo ${{ (github.event.inputs.github.appBundleId}}
         echo ${{ toJSON(github.event.inputs.github ) }}
         echo ${{ env.inputs }}
         echo ${{ env.inputs.appBundleId }}
