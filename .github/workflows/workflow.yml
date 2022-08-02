@@ -58,9 +58,9 @@ jobs:
     steps:
     - uses: actions/checkout@master
       with:
-        repository: ${{ github.event.inputs.repo.repository}}
-        token: ${{ github.event.inputs.repo.token}}
-        ref: ${{ github.event.inputs.repo.ref}}
+        repository: naumanahmed19/mybrand-flutter
+        token: ${{ secrets.token }}
+        ref: android
         
      #  Send email
     - name: Send mail
