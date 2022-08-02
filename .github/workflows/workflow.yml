@@ -28,7 +28,8 @@ jobs:
 
     steps:
     - run: |
-        echo ${{ env.inputs['appBundleId'] }}
+        echo  echo "${{fromJson(env.inputs).appBundleId}}"
+
         
     - uses: actions/checkout@master
       with:
