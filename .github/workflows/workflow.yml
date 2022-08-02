@@ -28,8 +28,6 @@ jobs:
 
     steps:
     - run: |
-        echo ${{ toJSON(github.event.inputs.github ) }}
-        echo ${{ env.inputs }}
         echo ${{ env.inputs.appBundleId }}
         
     - uses: actions/checkout@master
