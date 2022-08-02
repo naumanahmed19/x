@@ -14,39 +14,7 @@ on:
       # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
     inputs:
-      branch:
-        default: "test"
-      flutterVersion:
-        description: 'Flutter Framework version'
-        required: true
-        default: '3.0.3'
-      appName:
-        description: 'App Name'
-        required: true
-        default: '' 
-      appBundleId:
-        description: 'Unique app bundle id'
-        required: true
-        default: '' 
-      appIcon:
-        description: 'Application Icon'
-        required: true
-        default: '' 
-      appSplashIcon:
-        description: 'Application Icon'
-        required: true
-        default: ''
-      appSplashColor:
-        description: 'Application Icon'
-        required: true
-        default: '#ffffff'  
-      userEmail:
-        description: 'User email where we need to send information for steps'
-        required: true
-      buildStatusCallBackUrl:
-        description: 'Update a build status'
-        required: true
-      repo:
+      github:
         description: 'Item Reo'
         required: true
       
