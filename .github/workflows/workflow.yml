@@ -28,7 +28,7 @@ jobs:
 
     steps:
     - run: |
-        echo ${{ env.inputs.appBundleId }}
+        echo ${{ env.inputs }}
         
     - uses: actions/checkout@master
       with:
