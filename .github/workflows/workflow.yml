@@ -22,15 +22,11 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      inputs: ${{ toJSON(github.event.inputs.github ) }}
     
 
     steps:
-    - name: Dump GitHub context
-      id: github_context_step
-      run: echo $JSON
-      env:
-        JSON: ${{ toJSON(github.event.inputs.github ) }}
-          
     - uses: actions/checkout@master
       with:
         repository: naumanahmed19/mybrand-flutter
@@ -50,9 +46,9 @@ jobs:
         # Optional (recommended) mail server password:
         password: ${{secrets.MAIL_PASSWORD}}
         # Required mail subject:
-        subject: xapp build started for ${{ github.event.inputs.appName }}
+        subject: xapp build started for ${{ env.inputs.appName }}
         # Required recipients' addresses:
-        to: ${{ github.event.inputs.userEmail }}
+        to: ${{ env.inputs.userEmail }}
         # Required sender full name (address can be skipped):
         from: xapp # <xapp@app.com>
         # Optional whether this connection use TLS (default is true if server_port is 465)
