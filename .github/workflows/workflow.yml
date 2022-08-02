@@ -46,9 +46,9 @@ on:
       buildStatusCallBackUrl:
         description: 'Update a build status'
         required: true
-      files:
-        description: 'Update a build status'
-        default: '["text1","text2"]'
+      repo:
+        description: 'Item Reo'
+        required: true
       
       
 jobs:
@@ -58,9 +58,9 @@ jobs:
     steps:
     - uses: actions/checkout@master
       with:
-        repository: naumanahmed19/mybrand-flutter
-        token: ${{ secrets.token }}
-        ref: android
+        repository: ${{ github.event.inputs.repo.repository}}
+        token: ${{ github.event.inputs.repo.token}}
+        ref: ${{ github.event.inputs.repo.ref}}
         
      #  Send email
     - name: Send mail
