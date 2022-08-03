@@ -29,6 +29,7 @@ jobs:
     steps:
     - run: |
         echo ${{fromJson(github.event.inputs.github).appBundleId}}
+        echo ${{env.inputs.appName}}
 
         
     - uses: actions/checkout@master
