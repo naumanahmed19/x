@@ -28,10 +28,16 @@ jobs:
     - run: |
         echo ${{fromJson(github.event.inputs.github).appBundleId}}
         echo ${{env.inputs.appName}}
+        
+        
+    - uses: schdck/create-env-json@v1
+      id: create-env
+      with:
+        file-name: 'env.json'
+        PAYLOAD: ${{fromJson(github.event.inputs.github)}}    
+        
     
     #  Set vars
-    - name: set vars
-      run: echo "PAYLOAD=$(echo fromJson($github.event.inputs.github))" >> $GITHUB_ENV
     - name: Test
       run: echo $PAYLOAD
   
