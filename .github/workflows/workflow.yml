@@ -23,7 +23,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     env:
-      inputs: ${{ fromJson(github.event.inputs.github ) }}
+      inputs: ${{ toJson(github.event.inputs.github ) }}
     
 
     steps:
