@@ -53,7 +53,7 @@ jobs:
         # Required mail subject:
         subject: xapp build started for ${{ env.inputs.appName }}
         # Required recipients' addresses:
-        to: ${{ env.inputs.userEmail }}
+        to: ${{fromJson(github.event.inputs.github).userEmail}}
         # Required sender full name (address can be skipped):
         from: xapp # <xapp@app.com>
         # Optional whether this connection use TLS (default is true if server_port is 465)
