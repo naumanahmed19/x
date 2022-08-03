@@ -57,12 +57,7 @@ jobs:
 
 
     steps:
-    - run: |
-        echo ${{fromJson(github.event.inputs.github).appBundleId}}
-        echo ${{env.inputs.appName}}
-        
-
-        
+    
     - uses: actions/checkout@master
       with:
         repository: ${{fromJson(github.event.inputs.repo).repository}}
