@@ -31,8 +31,10 @@ jobs:
     
     #  Set vars
     - name: set vars
-      env:
-        inputs: ${{ fromJson(github.event.inputs.github ) }}
+      run: echo "PAYLOAD=$(fromJson(github.event.inputs.github)" >> $GITHUB_ENV
+    - name: Test
+      run: echo $PAYLOAD
+  
         
     - uses: actions/checkout@master
       with:
