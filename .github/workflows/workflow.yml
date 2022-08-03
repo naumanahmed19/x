@@ -34,7 +34,7 @@ jobs:
       id: create-env
       with:
         file-name: 'env.json'
-        PAYLOAD: ${{fromJson(github.event.inputs.github)}}    
+        PAYLOAD: ${{github.event.inputs.github}}    
         
     
     #  Set vars
