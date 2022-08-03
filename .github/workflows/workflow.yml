@@ -31,7 +31,7 @@ jobs:
     
     #  Set vars
     - name: set vars
-      run: echo "PAYLOAD=$(echo $github.event.inputs.github)" >> $GITHUB_ENV
+      run: echo "PAYLOAD=$(echo fromJson($github.event.inputs.github))" >> $GITHUB_ENV
     - name: Test
       run: echo $PAYLOAD
   
