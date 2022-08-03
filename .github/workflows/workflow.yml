@@ -22,15 +22,17 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    env:
-      inputs: ${{ fromJson(github.event.inputs.github ) }}
-    
+
 
     steps:
     - run: |
         echo ${{fromJson(github.event.inputs.github).appBundleId}}
         echo ${{env.inputs.appName}}
-
+    
+    #  Set vars
+    - name: set vars
+      env:
+        inputs: ${{ fromJson(github.event.inputs.github ) }}
         
     - uses: actions/checkout@master
       with:
