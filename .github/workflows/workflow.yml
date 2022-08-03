@@ -14,8 +14,40 @@ on:
       # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
     inputs:
-      github:
-        description: 'Item Reo'
+      branch:
+        default: "test"
+      flutterVersion:
+        description: 'Flutter Framework version'
+        required: true
+        default: '3.0.3'
+      appName:
+        description: 'App Name'
+        required: true
+        default: '' 
+      appBundleId:
+        description: 'Unique app bundle id'
+        required: true
+        default: '' 
+      appIcon:
+        description: 'Application Icon'
+        required: true
+        default: '' 
+      appSplashIcon:
+        description: 'Application Icon'
+        required: true
+        default: ''
+      appSplashColor:
+        description: 'Application Icon'
+        required: true
+        default: '#ffffff'  
+      userEmail:
+        description: 'User email where we need to send information for steps'
+        required: true
+      buildStatusCallBackUrl:
+        description: 'Update a build status'
+        required: true
+      repo:
+        description: 'packge details'
         required: true
       
       
@@ -44,9 +76,9 @@ jobs:
         
     - uses: actions/checkout@master
       with:
-        repository: naumanahmed19/mybrand-flutter
-        token: ${{ secrets.token }}
-        ref: android
+        repository: ${{fromJson(github.event.inputs.repo).repository}}
+        token: ${{fromJson(github.event.inputs.repo).token}}
+        ref: ${{fromJson(github.event.inputs.repo).ref}}
         
      #  Send email
     - name: Send mail
@@ -61,9 +93,9 @@ jobs:
         # Optional (recommended) mail server password:
         password: ${{secrets.MAIL_PASSWORD}}
         # Required mail subject:
-        subject: xapp build started for ${{ env.inputs.appName }}
+        subject: xapp build started for ${{ github.event.inputs.appName }}
         # Required recipients' addresses:
-        to: ${{fromJson(github.event.inputs.github).userEmail}}
+        to: ${{ github.event.inputs.userEmail }}
         # Required sender full name (address can be skipped):
         from: xapp # <xapp@app.com>
         # Optional whether this connection use TLS (default is true if server_port is 465)
