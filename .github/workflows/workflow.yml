@@ -23,7 +23,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     env:
-      inputs: ${{ toJSON(github.event.inputs.github ) }}
+      inputs: ${{ fromJson(github.event.inputs.github ) }}
     
 
     steps:
@@ -124,9 +124,9 @@ jobs:
         # Optional (recommended) mail server password:
         password: ${{secrets.MAIL_PASSWORD}}
         # Required mail subject:
-        subject: XAPP - Build failed for ${{ github.event.inputs.appName }}
+        subject: XAPP - Build failed for ${{ fromJson(github.event.inputs.github).appName }}
         # Required recipients' addresses:
-        to: ${{ github.event.inputs.userEmail }}
+        to: ${{ fromJson(github.event.inputs.github).userEmail }}
         # Required sender full name (address can be skipped):
         from: Xapp # <Xapp@app.com>
         # Optional whether this connection use TLS (default is true if server_port is 465)
