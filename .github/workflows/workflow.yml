@@ -47,7 +47,7 @@ on:
         description: 'Update a build status'
         required: true
       repo:
-        description: 'packge details'
+        description: 'repo details'
         required: true
       
       
@@ -61,18 +61,7 @@ jobs:
         echo ${{fromJson(github.event.inputs.github).appBundleId}}
         echo ${{env.inputs.appName}}
         
-        
-    - uses: schdck/create-env-json@v1
-      id: create-env
-      with:
-        file-name: 'env.json'
-        PAYLOAD: ${{toJson(github.event.inputs.github)}}    
-        
-    
-    #  Set vars
-    - name: Test
-      run: echo $PAYLOAD
-  
+
         
     - uses: actions/checkout@master
       with:
