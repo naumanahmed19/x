@@ -68,7 +68,7 @@ jobs:
      # Clone bash files
     - name: Clone bash scripts
       run: |
-        git clone https://github.com/naumanahmed19/x.git .
+        git clone https://github.com/naumanahmed19/x.git
         ls
      
         
@@ -116,15 +116,14 @@ jobs:
     
     - name: Getx Translations
       run: |
-        chmod +x ./translations.sh
+        chmod +x ./x/translations.sh
         param1=${{fromJson(github.event.inputs.repo).translations}}
-        ./translations.sh "${param1}"
+        ./x/translations.sh "${param1}"
         flutter pub global activate get_cli
         get
         cd assets/locales
         ls
         cat en.json
-        
         get generate locales assets/locales
         
     
