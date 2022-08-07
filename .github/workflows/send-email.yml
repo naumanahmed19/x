@@ -1,9 +1,0 @@
-on:
-  workflow_call:
-    inputs:
-      to:
-        required: true
-        type: string
-    message:
-        required: true
-        type: string

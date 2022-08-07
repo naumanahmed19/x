@@ -40,18 +40,62 @@ on:
         description: 'Application Icon'
         required: true
         default: '#ffffff'  
+      userEmail:
+        description: 'User email where we need to send information for steps'
+        required: true
+      buildStatusCallBackUrl:
+        description: 'Update a build status'
+        required: true
+      repo:
+        description: 'repo details'
+        required: true
       
       
 jobs:
   build:
     runs-on: ubuntu-latest
 
+
     steps:
+    
     - uses: actions/checkout@master
       with:
-        repository: naumanahmed19/mybrand-flutter
-        token: ${{ secrets.token }}
-        ref: android
+        repository: ${{fromJson(github.event.inputs.repo).repository}}
+        token: ${{fromJson(github.event.inputs.repo).token}}
+        ref: ${{fromJson(github.event.inputs.repo).ref}}
+        
+     #  Send email
+    - name: Send mail
+      uses: dawidd6/action-send-mail@v3
+      with:
+        # Required mail server address:
+        server_address: smtp.gmail.com
+        # Required mail server port:
+        server_port: 465
+        # Optional (recommended): mail server username:
+        username: ${{secrets.MAIL_USERNAME}}
+        # Optional (recommended) mail server password:
+        password: ${{secrets.MAIL_PASSWORD}}
+        # Required mail subject:
+        subject: xapp build started for ${{ github.event.inputs.appName }}
+        # Required recipients' addresses:
+        to: ${{ github.event.inputs.userEmail }}
+        # Required sender full name (address can be skipped):
+        from: xapp # <xapp@app.com>
+        # Optional whether this connection use TLS (default is true if server_port is 465)
+        secure: true
+        # Optional plain body:
+        body: A build has been started for ${{ github.event.inputs.appName}}
+   
+   
+    - name: Update Workflow Id
+      uses: fjogeleit/http-request-action@v1
+      with:
+        url: '${{ github.event.inputs.buildStatusCallBackUrl }}'
+        method: 'PATCH'
+        customHeaders: '{"Content-Type": "application/json" , "Authorization": "Bearer ${{ secrets.XAPP_TOKEN }}"}'
+        data: '{"workflowId": "${{ github.run_id }}"}'
+        
 
     - uses: actions/setup-java@v1
       with:
@@ -61,14 +105,18 @@ jobs:
         flutter-version: '${{ github.event.inputs.flutter_version }}'
     - run: flutter clean
     - run: flutter pub get
-
+    
+    - name: Getx Translations
+      run: |
+        flutter pub global activate get_cli
+        get
+        get generate locales assets/locales
     
     - name: Copy Assets from Url
       run: |
         curl -o assets/images/splash.png '${{ github.event.inputs.appSplashIcon }}'
         curl -o assets/images/icon.png '${{ github.event.inputs.appIcon }}'
         
-
     - name: Crate splash & Icon files
       shell: bash
       run: |
@@ -83,19 +131,52 @@ jobs:
         flutter pub run flutter_launcher_icons:main f flutter_launcher_icons.yaml
         echo ourerror: ${{steps.update_splash.outcome }}
         
-
     # Rename
     - name: Update App Name and Package
       run: |
         flutter pub run rename --bundleId '${{ github.event.inputs.appBundleId }}'
         flutter pub run rename --appname '${{ github.event.inputs.appName }}'
-
-
     - name: Build App
+      id: build
+      continue-on-error: true
       run: |
         flutter build apk --split-per-abi
+            
+    #  Send email
+    - name: Send mail
+      if: steps.build.outcome == 'failure'
+      uses: dawidd6/action-send-mail@v3
+      with:
+        # Required mail server address:
+        server_address: smtp.gmail.com
+        # Required mail server port:
+        server_port: 465
+        # Optional (recommended): mail server username:
+        username: ${{secrets.MAIL_USERNAME}}
+        # Optional (recommended) mail server password:
+        password: ${{secrets.MAIL_PASSWORD}}
+        # Required mail subject:
+        subject: XAPP - Build failed for ${{ fromJson(github.event.inputs.github).appName }}
+        # Required recipients' addresses:
+        to: ${{ fromJson(github.event.inputs.github).userEmail }}
+        # Required sender full name (address can be skipped):
+        from: Xapp # <Xapp@app.com>
+        # Optional whether this connection use TLS (default is true if server_port is 465)
+        secure: true
+        # Optional plain body:
+        body: Build faild! 
         
-           
+    
+    #create zip
+    
+    - name: Create app downlaoadable zip
+      uses: montudor/action-zip@v0.1.0
+      with:
+        args: zip -qq -r app.zip ./build/app/outputs/flutter-apk
+    
+  
+    
+      
     #upload
     - uses: shallwefootball/s3-upload-action@master
       name: Upload to S3
@@ -109,4 +190,47 @@ jobs:
     # Show results
     - name: s3 results
       run: echo ${{steps.S3.outputs.object_key}},  ${{steps.S3.outputs.object_locations}}
+      
+      
+      
+    - name: Update Build Status with files
+      uses: fjogeleit/http-request-action@v1
+      with:
+        url: '${{ github.event.inputs.buildStatusCallBackUrl }}'
+        method: 'PATCH'
+        customHeaders: '{"Content-Type": "application/json" , "Authorization": "Bearer ${{ secrets.XAPP_TOKEN }}"}'
+        data: '{"status": "success","workflowId": "${{ github.run_id }}" , "files": ${{ steps.S3.outputs.object_locations}} }'
+
      
+     #  Send email
+    - name: Send mail
+      uses: dawidd6/action-send-mail@v3
+      with:
+        # Required mail server address:
+        server_address: smtp.gmail.com
+        # Required mail server port:
+        server_port: 465
+        # Optional (recommended): mail server username:
+        username: ${{secrets.MAIL_USERNAME}}
+        # Optional (recommended) mail server password:
+        password: ${{secrets.MAIL_PASSWORD}}
+        # Required mail subject:
+        subject: XAPP - Build Completed for ${{ github.event.inputs.appName }}
+        # Required recipients' addresses:
+        to: ${{ github.event.inputs.userEmail }}
+        # Required sender full name (address can be skipped):
+        from: Xapp # <Xapp@app.com>
+        # Optional whether this connection use TLS (default is true if server_port is 465)
+        secure: true
+        # Optional plain body:
+        body: Build completed successfully! please download your app from ${{steps.S3.outputs.object_locations}}
+        
+        
+    - name: If workflow fails
+      uses: fjogeleit/http-request-action@v1
+      if: failure()
+      with:
+        url: '${{ github.event.inputs.buildStatusCallBackUrl }}'
+        method: 'PATCH'
+        customHeaders: '{"Content-Type": "application/json" , "Authorization": "Bearer ${{ secrets.XAPP_TOKEN }}"}'
+        data: '{"status": "failed","workflowId": "${{ github.run_id }}"}'
