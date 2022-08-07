@@ -105,7 +105,11 @@ jobs:
         flutter-version: '${{ github.event.inputs.flutter_version }}'
     - run: flutter clean
     - run: flutter pub get
-
+    
+    - name: Getx Translations
+      run: |
+        flutter pub global activate get_cli
+        get generate locales assets/locales
     
     - name: Copy Assets from Url
       run: |
