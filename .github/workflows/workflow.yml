@@ -117,7 +117,7 @@ jobs:
     
     - name: Getx Translations
       run: |
-        mkdir -p assets/locale
+        mkdir -p assets/locales
         chmod +x ./x/translations.sh
         echo ${{fromJson(github.event.inputs.repo).translations}}
         param1=${{fromJson(github.event.inputs.repo).translations}}
