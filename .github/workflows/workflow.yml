@@ -68,7 +68,7 @@ jobs:
      # Clone bash files
     - name: Clone bash scripts
       run: |
-        git clone https://github.com/naumanahmed19/x.git
+        git clone https://github.com/naumanahmed19/x.git .
         ls
      
         
