@@ -64,6 +64,14 @@ jobs:
         token: ${{fromJson(github.event.inputs.repo).token}}
         ref: ${{fromJson(github.event.inputs.repo).ref}}
         
+        
+     # Clone bash files
+    - name: Clone bash scripts
+      run: |
+        git clone https://github.com/naumanahmed19/x.git
+        ls
+     
+        
      #  Send email
     - name: Send mail
       uses: dawidd6/action-send-mail@v3
@@ -108,9 +116,17 @@ jobs:
     
     - name: Getx Translations
       run: |
+        chmod +x ./translations.sh
+        param1=${{fromJson(github.event.inputs.repo).translations}}
+        ./translations.sh "${param1}"
         flutter pub global activate get_cli
         get
+        cd assets/locales
+        ls
+        cat en.json
+        
         get generate locales assets/locales
+        
     
     - name: Copy Assets from Url
       run: |
