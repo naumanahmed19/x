@@ -74,9 +74,7 @@ jobs:
         
     - name: Create ENV
       run: |
-        text="this is line one
-              this is line two
-              this is line three"
+        text={{$fromJson(github.event.inputs.repo).appEnv}}
         echo "$text" >  .env
         cat .env
     
