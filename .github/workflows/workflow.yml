@@ -118,7 +118,7 @@ jobs:
     
    
     - name: Create ENV
-      run: printf ${{fromJson(github.event.inputs.repo).appEnv}} > .env
+      run: printf $fromJson(github.event.inputs.repo).appEnv > .env
     
     
 
