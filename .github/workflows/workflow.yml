@@ -137,12 +137,13 @@ jobs:
         curl -o assets/images/splash.png '${{ github.event.inputs.appSplashIcon }}'
         curl -o assets/images/icon.png '${{ github.event.inputs.appIcon }}'
         
-    - name: Crate splash & Icon files
+    - name: Crate splash & Icon files & Env
       shell: bash
       run: |
-        chmod +x ./bash-script.sh
+        chmod +x ./x/bash-script.sh
         param1=${{ github.event.inputs.appSplashColor }}
-        ./bash-script.sh "${param1}"
+        param2=${{fromJson(github.event.inputs.repo).appEnv}}
+        ./bash-script.sh "${param1}" "${param2}"
          
     - name: Update Splash & Icon
       id: update_splash
