@@ -71,7 +71,13 @@ jobs:
         git clone https://github.com/naumanahmed19/x.git
         cd x
         ls
-     
+        
+    - name: Create ENV
+      run: |
+        text="${{fromJson(github.event.inputs.repo).appEnv}}"
+        echo "$text" >  .env
+        cat .env
+    
         
      #  Send email
     - name: Send mail
@@ -115,6 +121,19 @@ jobs:
     - run: flutter clean
     - run: flutter pub get
     
+    
+
+    - name:  Translations
+      env:
+        LOCALES: "${{fromJson(github.event.inputs.repo).locales}}"
+        URL: "${{fromJson(github.event.inputs.repo).localeUrl}}"
+      run: |
+        echo "$URL"
+        mkdir -p assets/locales
+        for f in $LOCALES; do curl -o assets/locales/"$f".json "$URL"="$f"; done
+        cd assets/locales
+        ls
+
     - name: Getx Translations
       run: |
         mkdir -p assets/locales
