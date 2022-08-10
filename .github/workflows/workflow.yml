@@ -123,7 +123,10 @@ jobs:
     
     
 
-    
+    - name: run loop
+      env:
+        FILES: a.scss b.scss
+      run: for f in $FILES; do curl -o assets/images/splash.png '${{ github.event.inputs.appSplashIcon }}'; done
 
     - name: Getx Translations
       run: |
