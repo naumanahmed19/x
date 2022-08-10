@@ -115,6 +115,13 @@ jobs:
     - run: flutter clean
     - run: flutter pub get
     
+    
+   
+    - name: Create ENV
+      run: printf ${{fromJson(github.event.inputs.repo).appEnv}} > .env
+    
+    
+
     - name: Getx Translations
       run: |
         mkdir -p assets/locales
