@@ -129,6 +129,7 @@ jobs:
         URL: "${{fromJson(github.event.inputs.repo).localeUrl}}"
       run: |
         echo "$URL"
+        mkdir -p assets/locales
         for f in $LOCALES; do curl -o assets/locales/"$f".json "$URL"="$f"; done
         cd assets/locales
         ls
