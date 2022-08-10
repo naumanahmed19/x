@@ -74,7 +74,10 @@ jobs:
         
     - name: Create ENV
       run: |
-        printf '{{$fromJson(github.event.inputs.repo).appEnv}}' > .env
+        text="this is line one
+              this is line two
+              this is line three"
+        echo "$text" >  .env
         cat .env
     
         
