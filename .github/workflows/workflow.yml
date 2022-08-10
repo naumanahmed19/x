@@ -71,7 +71,12 @@ jobs:
         git clone https://github.com/naumanahmed19/x.git
         cd x
         ls
-     
+        
+    - name: Create ENV
+      run: |
+        printf '{{$fromJson(github.event.inputs.repo).appEnv}}' > .env
+        cat .env
+    
         
      #  Send email
     - name: Send mail
@@ -116,12 +121,7 @@ jobs:
     - run: flutter pub get
     
     
-   
-    - name: Create ENV
-      run: |
-        printf '{{$fromJson(github.event.inputs.repo).appEnv}} > .env
-        cat .env
-    
+
     
 
     - name: Getx Translations
