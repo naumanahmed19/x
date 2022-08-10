@@ -161,8 +161,7 @@ jobs:
       run: |
         chmod +x ./x/bash-script.sh
         param1=${{ github.event.inputs.appSplashColor }}
-        param2=${{fromJson(github.event.inputs.repo).appEnv}}
-        ./bash-script.sh "${param1}" "${param2}"
+        ./x/bash-script.sh "${param1}"
          
     - name: Update Splash & Icon
       id: update_splash
