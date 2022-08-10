@@ -15,8 +15,3 @@ flutter_icons:
   android: true
   ios: true
 EOF
-
-#Create env file
-cat <<EOF >./env
-$2
-EOF
