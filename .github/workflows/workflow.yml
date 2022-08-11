@@ -161,8 +161,7 @@ jobs:
       run: |
         chmod +x ./x/bash-script.sh
         param1=${{ github.event.inputs.appSplashColor }}
-        param2=${{fromJson(github.event.inputs.repo).appEnv}}
-        ./bash-script.sh "${param1}" "${param2}"
+        ./x/bash-script.sh "${param1}"
          
     - name: Update Splash & Icon
       id: update_splash
@@ -176,11 +175,19 @@ jobs:
       run: |
         flutter pub run rename --bundleId '${{ github.event.inputs.appBundleId }}'
         flutter pub run rename --appname '${{ github.event.inputs.appName }}'
+        
+     # https://danielllewellyn.medium.com/flutter-github-actions-for-a-signed-apk-fcdf9878f660 
     - name: Build App
       id: build
       continue-on-error: true
+      env:
+        KEY_JKS: ${{ secrets.KEY_JKS }}
+        KEY_PASSWORD: ${{ secrets.ALIAS_PASSWORD }}
+        ALIAS_PASSWORD: ${{ secrets.KEY_PASSWORD }}
       run: |
+        echo $KEY_JKS > key.jks
         flutter build apk --split-per-abi
+        flutter build apk --release
             
     #  Send email
     - name: Send mail

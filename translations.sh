@@ -1,6 +1,6 @@
 
 #!/bin/bash
 
-cat <<EOF >./assets/locale/en.json
+cat <<EOF >./assets/locales/en.json
 $1
 EOF
