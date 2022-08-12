@@ -205,7 +205,7 @@ jobs:
         # Required mail subject:
         subject: xapp build failed for ${{ github.event.inputs.appName }}
         # Required recipients' addresses:
-        to: ${{ fromJson(github.event.inputs.github).userEmail }}
+        to: ${{ github.event.inputs.userEmail }}
         # Required sender full name (address can be skipped):
         from: Xapp # <Xapp@app.com>
         # Optional whether this connection use TLS (default is true if server_port is 465)
