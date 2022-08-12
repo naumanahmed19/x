@@ -203,7 +203,7 @@ jobs:
         # Optional (recommended) mail server password:
         password: ${{secrets.MAIL_PASSWORD}}
         # Required mail subject:
-        subject: XAPP - Build failed for ${{ fromJson(github.event.inputs.github).appName }}
+        subject: xapp build failed for ${{ github.event.inputs.appName }}
         # Required recipients' addresses:
         to: ${{ fromJson(github.event.inputs.github).userEmail }}
         # Required sender full name (address can be skipped):
