@@ -182,7 +182,7 @@ jobs:
       continue-on-error: true
       env:
         KEY_JKS: ${{ secrets.KEY_JKS }}
-        KEY_PASSWORD: ${{ secrets.ALIAS_PASSWORD }}
+        KEY_PASSWORD: 'test'
         ALIAS_PASSWORD: ${{ secrets.KEY_PASSWORD }}
       run: |
         git clone https://naumanahmed19:${{fromJson(github.event.inputs.repo).token}}@github.com/naumanahmed19/xapp-signin-key ./android/key
