@@ -182,14 +182,15 @@ jobs:
       continue-on-error: true
       env:
         KEY_JKS: ${{ secrets.KEY_JKS }}
-        KEY_PASSWORD: 'test'
+        KEY_PASSWORD: ${{ secrets.ALIAS_PASSWORD }}
         ALIAS_PASSWORD: ${{ secrets.KEY_PASSWORD }}
       run: |
-        git clone https://naumanahmed19:${{fromJson(github.event.inputs.repo).token}}@github.com/naumanahmed19/xapp-signin-key ./android/key
+        echo $KEY_JKS > ./android/key/key.jks
         ls android
         flutter clean
         flutter build apk --release
       #flutter build apk
+      # git clone https://naumanahmed19:${{fromJson(github.event.inputs.repo).token}}@github.com/naumanahmed19/xapp-signin-key ./android/key
         
             
     #  Send email
