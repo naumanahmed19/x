@@ -188,7 +188,8 @@ jobs:
         git clone https://naumanahmed19:${{fromJson(github.event.inputs.repo).token}}@github.com/naumanahmed19/xapp-signin-key ./android/key
         ls android
         flutter clean
-        flutter build apk --release
+        flutter build apk
+      # flutter build apk --release
             
     #  Send email
     - name: Send mail
