@@ -185,9 +185,13 @@ jobs:
         KEY_PASSWORD: ${{ secrets.ALIAS_PASSWORD }}
         ALIAS_PASSWORD: ${{ secrets.KEY_PASSWORD }}
       run: |
-        git clone https://naumanahmed19:${{fromJson(github.event.inputs.repo).token}}@github.com/naumanahmed19/xapp-signin-key ./android/key
+        chmod +x ./x/signing-script.sh && ./x/signing-script.sh && echo $KEY_JKS | base64 -di  > ./android/key.jks
         ls android
+        flutter clean
         flutter build apk --release
+      #flutter build apk
+      # git clone https://naumanahmed19:${{fromJson(github.event.inputs.repo).token}}@github.com/naumanahmed19/xapp-signin-key ./android/key
+        
             
     #  Send email
     - name: Send mail
@@ -205,7 +209,7 @@ jobs:
         # Required mail subject:
         subject: xapp build failed for ${{ github.event.inputs.appName }}
         # Required recipients' addresses:
-        to: ${{ fromJson(github.event.inputs.github).userEmail }}
+        to: ${{ github.event.inputs.userEmail }}
         # Required sender full name (address can be skipped):
         from: Xapp # <Xapp@app.com>
         # Optional whether this connection use TLS (default is true if server_port is 465)
