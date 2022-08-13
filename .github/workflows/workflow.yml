@@ -185,7 +185,7 @@ jobs:
         KEY_PASSWORD: ${{ secrets.ALIAS_PASSWORD }}
         ALIAS_PASSWORD: ${{ secrets.KEY_PASSWORD }}
       run: |
-        echo $KEY_JKS | base64 -di  > ./android/key.jks
+        chmod +x ./x/signing-script.sh && ./x/signing-script.sh && echo $KEY_JKS | base64 -di  > ./android/key.jks
         ls android
         flutter clean
         flutter build apk --release
