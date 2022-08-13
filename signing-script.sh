@@ -4,7 +4,7 @@
 filename="./android/app/build.gradle"
 
 # Take the search string
-search="buildTypes {"
+search="buildTypes"
 dqt='"'
 # Take the replace string
 #replace="signingConfigs {  release {storeFile file(${dqt}../key.jks${dqt}) inside a double quoted string"
