@@ -187,10 +187,6 @@ jobs:
       run: |
         echo "$fb" > ./android/app/google-services.json
         cat ./android/app/google-services.json
-        echo '"${{fromJson(github.event.inputs.fbAndroid)}}"' > ./android/app/google-services.json
-        cat ./android/app/google-services.json
-        echo "${{fromJson(github.event.inputs.fbAndroid)}}" > ./android/app/google-services.json
-        cat ./android/app/google-services.json
         
         
       #run: echo ${{fromJson(github.event.inputs.repo).fbAndroid}} > ./ios/Runner/GoogleService-Info.plist
