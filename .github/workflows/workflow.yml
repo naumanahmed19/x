@@ -14,8 +14,6 @@ on:
       # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
     inputs:
-      branch:
-        default: "test"
       flutterVersion:
         description: 'Flutter Framework version'
         required: true
