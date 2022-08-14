@@ -183,7 +183,7 @@ jobs:
      # Firebase Settings Update
     - name: Firebase Settings Update
       run: |
-        echo "${{ github.event.inputs.fbAndroid }}" > ./android/app/google-services.json
+        echo "${{ toJSON(github.event.inputs.fbAndroid) }}" > ./android/app/google-services.json
         cat ./android/app/google-services.json
       #run: echo ${{fromJson(github.event.inputs.repo).fbAndroid}} > ./ios/Runner/GoogleService-Info.plist
         
