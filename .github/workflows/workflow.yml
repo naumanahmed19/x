@@ -178,8 +178,10 @@ jobs:
         
         
      # Firebase Settings Update
-   # - name: Firebase Settings Update
-      #run: echo "${{fromJson(github.event.inputs.repo).fbAndroid}}" > ./android/app/google-services.json
+    - name: Firebase Settings Update
+      run: |
+        echo '${{fromJson(github.event.inputs.repo).fbAndroid}}' > ./android/app/google-services.json
+        run: cat ./android/app/google-services.json
       #run: echo ${{fromJson(github.event.inputs.repo).fbAndroid}} > ./ios/Runner/GoogleService-Info.plist
         
         
