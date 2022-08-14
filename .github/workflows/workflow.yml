@@ -179,8 +179,8 @@ jobs:
         
      # Firebase Settings Update
     - name: Firebase Settings Update
-      run: echo "${{fromJson(github.event.inputs.repo).fbAndroid}} " > ./android/app/google-services.json'
-      #run: echo ${{fromJson(github.event.inputs.repo).fbAndroid}} > ./ios/Runner/GoogleService-Info.plist'
+      run: echo "${{fromJson(github.event.inputs.repo).fbAndroid}} " > ./android/app/google-services.json
+      #run: echo ${{fromJson(github.event.inputs.repo).fbAndroid}} > ./ios/Runner/GoogleService-Info.plist
         
         
      # https://danielllewellyn.medium.com/flutter-github-actions-for-a-signed-apk-fcdf9878f660 
