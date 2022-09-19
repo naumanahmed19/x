@@ -180,10 +180,17 @@ jobs:
         flutter pub run rename --appname '${{ github.event.inputs.appName }}'
         
         
+    # Test FB
+    - name: Update App Name and Package
+      run: |
+        echo ${{github.event.inputs.fbAndroid}}
+
+              
+        
      # Firebase Settings Update
     - name: Firebase Settings Update
       env:
-        fb : "${{fromJson(github.event.inputs.fbAndroid)}}"
+        fb : "${{github.event.inputs.fbAndroid}}"
       run: |
         echo "$fb" > ./android/app/google-services.json
         cat ./android/app/google-services.json
