@@ -179,12 +179,7 @@ jobs:
         flutter pub run rename --bundleId '${{ github.event.inputs.appBundleId }}'
         flutter pub run rename --appname '${{ github.event.inputs.appName }}'
         
-        
-    # Test FB
-    - name: Update App Name and Package
-      run: |
-        echo ${{github.event.inputs.fbAndroid}}
-
+      
               
         
      # Firebase Settings Update
