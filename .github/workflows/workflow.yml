@@ -122,34 +122,6 @@ jobs:
     - run: flutter pub get
     
     
-
-    - name:  Translations
-      env:
-        LOCALES: "${{fromJson(github.event.inputs.repo).locales}}"
-        URL: "${{fromJson(github.event.inputs.repo).localeUrl}}"
-      run: |
-        echo "$URL"
-        mkdir -p assets/locales
-        for f in $LOCALES; do curl -o assets/locales/"$f".json "$URL"="$f"; done
-        cd assets/locales
-        ls
-
-    - name: Getx Translations
-      run: |
-        mkdir -p assets/locales
-        chmod +x ./x/translations.sh
-        echo ${{fromJson(github.event.inputs.repo).translations}}
-        param1=${{fromJson(github.event.inputs.repo).translations}}
-        ./x/translations.sh "${param1}"
-        flutter pub global activate get_cli
-        get
-        echo '-------------------------'
-        cd assets/locales
-        echo '-------------------------'
-        ls
-        cat en.json
-        get generate locales assets/locales
-        
     
     - name: Copy Assets from Url
       run: |
