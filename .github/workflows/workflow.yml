@@ -125,34 +125,6 @@ jobs:
     - run: flutter pub get
     
     
-
-    - name:  Translations
-      env:
-        LOCALES: "${{fromJson(github.event.inputs.repo).locales}}"
-        URL: "${{fromJson(github.event.inputs.repo).localeUrl}}"
-      run: |
-        echo "$URL"
-        mkdir -p assets/locales
-        for f in $LOCALES; do curl -o assets/locales/"$f".json "$URL"="$f"; done
-        cd assets/locales
-        ls
-
-    - name: Getx Translations
-      run: |
-        mkdir -p assets/locales
-        chmod +x ./x/translations.sh
-        echo ${{fromJson(github.event.inputs.repo).translations}}
-        param1=${{fromJson(github.event.inputs.repo).translations}}
-        ./x/translations.sh "${param1}"
-        flutter pub global activate get_cli
-        get
-        echo '-------------------------'
-        cd assets/locales
-        echo '-------------------------'
-        ls
-        cat en.json
-        get generate locales assets/locales
-        
     
     - name: Copy Assets from Url
       run: |
@@ -195,6 +167,18 @@ jobs:
         
         
      # https://danielllewellyn.medium.com/flutter-github-actions-for-a-signed-apk-fcdf9878f660 
+     
+    - name: Push
+      uses: s0/git-publish-subdir-action@develop
+      env:
+        REPO: self
+        BRANCH: build # The branch name where you want to push the assets
+        FOLDER: . # The directory where your assets are generated
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # GitHub will automatically add this - you don't need to bother getting a token
+        MESSAGE: "Build: ${{ github.event.inputs.appName }} - ({sha}) {msg}" # The commit message
+        
+        
+        
     - name: Build App
       id: build
       continue-on-error: true
@@ -236,6 +220,7 @@ jobs:
         body: Build faild! 
         
     
+        
     #create zip
     
     - name: Create app downlaoadable zip
@@ -253,7 +238,7 @@ jobs:
         aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws_bucket: ${{ secrets.AWS_BUCKET }}
         source_dir: './build/app/outputs/flutter-apk'
-
+  
     # Show results
     - name: s3 results
       run: echo ${{steps.S3.outputs.object_key}},  ${{steps.S3.outputs.object_locations}}
