@@ -163,11 +163,18 @@ jobs:
         cat ./android/app/google-services.json
         
         
+        
+        
+        
       #run: echo ${{fromJson(github.event.inputs.repo).fbAndroid}} > ./ios/Runner/GoogleService-Info.plist
         
         
      # https://danielllewellyn.medium.com/flutter-github-actions-for-a-signed-apk-fcdf9878f660 
-     
+    - name: See files
+      run: |
+        ls
+        rm -rf .git
+    
     - name: Push
       uses: s0/git-publish-subdir-action@develop
       env:
