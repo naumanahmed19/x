@@ -171,10 +171,10 @@ jobs:
     - name: Push
       uses: s0/git-publish-subdir-action@develop
       env:
-        REPO: ${{fromJson(github.event.inputs.repo).repository}}
+        REPO:  git@github.com:naumanahmed19/mybrand-flutter.git
         BRANCH: build # The branch name where you want to push the assets
         FOLDER: . # The directory where your assets are generated
-        SSH_PRIVATE_KEY: ${{fromJson(github.event.inputs.repo).token}}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         MESSAGE: "Build: ${{ github.event.inputs.appName }} - ({sha}) {msg}" # The commit message
         
         
