@@ -60,7 +60,7 @@ jobs:
 
     steps:
     
-    - uses: actions/checkout@master
+    - uses: actions/checkout@v3
       with:
         repository: ${{fromJson(github.event.inputs.repo).repository}}
         token: ${{fromJson(github.event.inputs.repo).token}}
@@ -114,12 +114,11 @@ jobs:
         data: '{"workflowId": "${{ github.run_id }}"}'
         
 
-    - uses: actions/setup-java@v1
+
+    - uses: subosito/flutter-action@v2
       with:
-        java-version: '12.x'
-    - uses: subosito/flutter-action@v2.2.0
-      with:
-        flutter-version: '${{ github.event.inputs.flutter_version }}'
+        channel: 'stable'
+        architecture: x64
     - run: flutter clean
     - run: flutter pub get
   
