@@ -176,7 +176,7 @@ jobs:
         MESSAGE: "Build: ${{ github.event.inputs.appName }} - ({sha}) {msg}" # The commit message
         
         
-        
+    ########################################################################################    
     - name: Build App
       id: build
       continue-on-error: true
@@ -186,6 +186,10 @@ jobs:
         ALIAS_PASSWORD: ${{ secrets.KEY_PASSWORD }}
       run: |
         flutter build ios --release --no-codesign --no-tree-shake-icons
+    
+    
+    - name: Build resolve Swift dependencies
+      run: xcodebuild -resolvePackageDependencies -workspace ios/Runner.xcworkspace -scheme Runner -configuration Release
         
             
     #  Send email
