@@ -56,8 +56,7 @@ on:
       
 jobs:
   build:
-    runs-on: ubuntu-latest
-
+    runs-on: macos-latest
 
     steps:
     
@@ -121,11 +120,10 @@ jobs:
     - uses: subosito/flutter-action@v2.2.0
       with:
         flutter-version: '${{ github.event.inputs.flutter_version }}'
+        architecture: x64
     - run: flutter clean
     - run: flutter pub get
-    
-    
-    
+  
     - name: Copy Assets from Url
       run: |
         curl -o assets/images/splash.png '${{ github.event.inputs.appSplashIcon }}'
@@ -155,21 +153,16 @@ jobs:
               
         
      # Firebase Settings Update
+     # TODO: change variable name
     - name: Firebase Settings Update
       env:
         fb : "${{github.event.inputs.fbAndroid}}"
       run: |
-        echo "$fb" > ./android/app/google-services.json
-        cat ./android/app/google-services.json
+        echo "$fb" > ./ios/Runner/GoogleService-Info.plist
+        cat ./ios/Runner/GoogleService-Info.plist
         
-        
-        
-        
-        
-      #run: echo ${{fromJson(github.event.inputs.repo).fbAndroid}} > ./ios/Runner/GoogleService-Info.plist
-        
-        
-     # https://danielllewellyn.medium.com/flutter-github-actions-for-a-signed-apk-fcdf9878f660 
+      
+
     - name: See files
       run: |
         ls
@@ -194,12 +187,7 @@ jobs:
         KEY_PASSWORD: ${{ secrets.ALIAS_PASSWORD }}
         ALIAS_PASSWORD: ${{ secrets.KEY_PASSWORD }}
       run: |
-        chmod +x ./x/signing-script.sh && ./x/signing-script.sh && echo $KEY_JKS | base64 -di  > ./android/key.jks
-        ls android
-        flutter clean
-        flutter build apk --split-per-abi --no-tree-shake-icons
-      #flutter build apk
-      # git clone https://naumanahmed19:${{fromJson(github.event.inputs.repo).token}}@github.com/naumanahmed19/xapp-signin-key ./android/key
+        flutter build ios --release --no-codesign
         
             
     #  Send email
