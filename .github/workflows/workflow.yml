@@ -185,7 +185,7 @@ jobs:
         KEY_PASSWORD: ${{ secrets.ALIAS_PASSWORD }}
         ALIAS_PASSWORD: ${{ secrets.KEY_PASSWORD }}
       run: |
-        flutter build ios --release --no-codesign
+        flutter build ios --release --no-codesign --no-tree-shake-icons
         
             
     #  Send email
