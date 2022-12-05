@@ -120,7 +120,6 @@ jobs:
     - uses: subosito/flutter-action@v2.2.0
       with:
         flutter-version: '${{ github.event.inputs.flutter_version }}'
-        architecture: x64
     - run: flutter clean
     - run: flutter pub get
   
