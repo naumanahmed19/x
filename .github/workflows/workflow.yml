@@ -44,7 +44,7 @@ on:
       buildStatusCallBackUrl:
         description: 'Update a build status'
         required: true
-      fbAndroid:
+      appBundleData:
         description: 'Update a build status'
         required: true  
       repo:
@@ -155,9 +155,10 @@ jobs:
               
         
      # Firebase Settings Update
+    #fb : "${{github.event.inputs.fbAndroid}}"
     - name: Firebase Settings Update
       env:
-        fb : "${{github.event.inputs.fbAndroid}}"
+        fb : "${{fromJson(github.event.inputs.appBundleData).googleService}}"
       run: |
         echo "$fb" > ./android/app/google-services.json
         cat ./android/app/google-services.json
