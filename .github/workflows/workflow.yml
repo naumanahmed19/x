@@ -44,7 +44,7 @@ on:
       buildStatusCallBackUrl:
         description: 'Update a build status'
         required: true
-      fbAndroid:
+      appBundleData:
         description: 'Update a build status'
         required: true  
       repo:
