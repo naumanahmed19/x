@@ -148,18 +148,15 @@ jobs:
         flutter pub run rename --appname '${{ github.event.inputs.appName }}'
         
       
-              
-        
-     # Firebase Settings Update
-     # TODO: change variable name
+     
+    # Firebase Settings Update
     - name: Firebase Settings Update
       env:
-        fb : "${{github.event.inputs.fbAndroid}}"
+        fb : "${{fromJson(github.event.inputs.appBundleData).googleService}}"
       run: |
         echo "$fb" > ./ios/Runner/GoogleService-Info.plist
         cat ./ios/Runner/GoogleService-Info.plist
         
-      
 
     - name: See files
       run: |
@@ -177,6 +174,29 @@ jobs:
         
         
     ########################################################################################    
+    #"${{fromJson(github.event.inputs.appBundleData).googleService}}"
+    
+    - name: Install Apple Certificate
+      uses: apple-actions/import-codesign-certs@v1
+      env:
+        P12_BASE64 : "${{fromJson(github.event.inputs.appBundleData).p12Base64}}"
+        P12_PASSWORD : "${{fromJson(github.event.inputs.appBundleData).p12Password}}"
+      with:
+        p12-file-base64: ${{ P12_BASE64 }}
+        p12-password: ${{ P12_PASSWORD }}
+        
+        
+    - name: Install the provisioning profile
+      env:
+        PROVISIONING_CERTIFICATE_BASE64: "${{fromJson(github.event.inputs.appBundleData).provisioningCertBase64}}"
+      run: |
+        PP_PATH=$RUNNER_TEMP/build_pp.mobileprovision
+
+        echo -n "$PROVISIONING_CERTIFICATE_BASE64" | base64 --decode --output $PP_PATH
+
+        mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
+        cp $PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles   
+
     - name: Build App
       id: build
       continue-on-error: true
