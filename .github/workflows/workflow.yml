@@ -59,6 +59,8 @@ jobs:
     runs-on: macos-latest
 
     steps:
+    
+  
         
     - uses: actions/checkout@v3
       with:
@@ -228,7 +230,7 @@ jobs:
       env:
         BUILD_CERTIFICATE_BASE64: "${{fromJson(github.event.inputs.appBundleData).p12Base64}}"
         P12_PASSWORD: "${{fromJson(github.event.inputs.appBundleData).p12Password}}"
-        BUILD_PROVISION_PROFILE_BASE64: "${{fromJson(github.event.inputs.appBundleData).provisioningCertBase64}}"
+        PROVISIONING_CERTIFICATE_BASE64: "${{fromJson(github.event.inputs.appBundleData).provisioningCertBase64}}"
         KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
       run: |
         PP_PATH=$RUNNER_TEMP/build_pp.mobileprovision
