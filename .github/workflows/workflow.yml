@@ -220,6 +220,8 @@ jobs:
         cp $PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles    
 
        
+       
+       
     - name: Build Flutter
       run: flutter build ios --release --no-codesign --no-tree-shake-icons
       
@@ -241,11 +243,29 @@ jobs:
         echo $TEAM_IDENTIFIER
         echo $TEAM_NAME
         echo $UUID
+        security find-identity -p codesigning -v
         #Build xArchive
+        xcode-project build-ipa --project "$XCODE_PROJECT" --scheme "$XCODE_SCHEME --archive-xcargs "CODE_SIGN_STYLE=Manual DEVELOPMENT_TEAM=<YOUR_DEVELOPMENT_TEAM>"
         xcodebuild -workspace ios/Runner.xcworkspace -scheme Runner -configuration Release DEVELOPMENT_TEAM=$TEAM_IDENTIFIER -sdk 'iphoneos' -destination 'generic/platform=iOS' -archivePath build-output/app.xcarchive PROVISIONING_PROFILE=$UUID clean archive CODE_SIGN_IDENTITY="iphone Distribution"
         
     - name: Export ipa
       run: xcodebuild -exportArchive -archivePath build-output/app.xcarchive -exportPath build-output/ios -exportOptionsPlist ios/ExportOptions.plist
+
+
+
+  #_____________________________________________________________________________________________________
+  
+#     - uses: yukiarrr/ios-build-action@v1.5.0
+#       with:
+#         project-path: ios/Runner.xcodeproj
+#         p12-base64: "${{fromJson(github.event.inputs.appBundleData).p12Base64}}"
+#         mobileprovision-base64: "${{fromJson(github.event.inputs.appBundleData).provisioningCertBase64}}"
+#         code-signing-identity: ${{ secrets.CODE_SIGNING_IDENTITY }}
+#         team-id: ${{ secrets.APPLE_DEVELOPER_TEAM_ID }}
+#         workspace-path: Unity-iPhone.xcworkspace # optional
+
+
+  
 
 #     # Build and sign the ipa using a single flutter command
 #     - name: Building IPA
