@@ -79,11 +79,9 @@ jobs:
         # import certificate and provisioning profile from secrets
         echo $CERTIFICATE_PATH
         echo $PP_PATH
-        openssl smime -in "$PP_PATH" -inform der -verify -noverify |  grep -A 2 -a TeamIdentifier | grep "string" | sed -E "s/.*>([^<]*)<.*/\1/g"
-        TEAM_IDENTIFIER=openssl smime -in $PP_PATH -inform der -verify -noverify |  grep -A 2 -a TeamIdentifier | grep "string" | sed -E "s/.*>([^<]*)<.*/\1/g"
-        TEAM_NAME=openssl smime -in $PP_PATH -inform der -verify -noverify |  grep -A 1 -a TeamName | grep "string" | sed -E "s/.*>([^<]*)<.*/\1/g"
+        TEAM_IDENTIFIER=`openssl smime -in $PP_PATH -inform der -verify -noverify |  grep -A 2 -a TeamIdentifier | grep "string" | sed -E "s/.*>([^<]*)<.*/\1/g"`
+        TEAM_NAME=`openssl smime -in $PP_PATH -inform der -verify -noverify |  grep -A 1 -a TeamName | grep "string" | sed -E "s/.*>([^<]*)<.*/\1/g"`
         UUID=`openssl smime -in "$PP_PATH" -inform der -verify -noverify |  grep -A 1 -a UUID | grep "string" | sed -E "s/.*>([^<]*)<.*/\1/g"`
-        openssl smime -in "$PP_PATH" -inform der -verify -noverify |  grep -A 1 -a UUID | grep "string" | sed -E "s/.*>([^<]*)<.*/\1/g"
         echo $TEAM_IDENTIFIER
         echo $TEAM_NAME
         echo $UUID
