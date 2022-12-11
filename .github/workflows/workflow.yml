@@ -201,7 +201,7 @@ jobs:
         # apply provisioning profile
         mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
         cp $PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles
-        TEAM_IDENTIFIER=openssl smime -in $PP_PATH -inform der -verify -noverify |  grep -A 2 -a TeamIdentifier | grep "string" | sed -E "s/.*>([^<]*)<.*/\1/g"
+        TEAM_IDENTIFIER=openssl smime -in ~/Library/MobileDevice/Provisioning\ Profiles/build_pp.mobileprovision -inform der -verify -noverify |  grep -A 2 -a TeamIdentifier | grep "string" | sed -E "s/.*>([^<]*)<.*/\1/g"
         echo -n "$TEAM_IDENTIFIER"  
 
 
