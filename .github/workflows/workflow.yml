@@ -268,7 +268,15 @@ jobs:
 
 #     # Build and sign the ipa using a single flutter command
     - name: Building IPA
+      id: build-ipa
       run: flutter build ipa --release --export-options-plist=ios/Runner/ExportOptions.plist
+      
+      
+    - name: Collect and send log file
+      if: failure()
+      run: |
+        # copy the log file from the failed step
+        echo steps.build-ipa.outputs.log
 
     # Collect the file and upload as artifact         
     - name: collect ipa artifacts
