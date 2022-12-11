@@ -203,12 +203,9 @@ jobs:
         
     - name: Install Apple Certificate
       uses: apple-actions/import-codesign-certs@v1
-      env:
-        BUILD_CERTIFICATE_BASE64: "${{fromJson(github.event.inputs.appBundleData).p12Base64}}"
-        P12_PASSWORD: "${{fromJson(github.event.inputs.appBundleData).p12Password}}"
       with:
-        p12-file-base64: ${{ BUILD_CERTIFICATE_BASE64 }}
-        p12-password: ${{ P12_PASSWORD }}
+        p12-file-base64: "${{fromJson(github.event.inputs.appBundleData).p12Base64}}"
+        p12-password: "${{fromJson(github.event.inputs.appBundleData).p12Password}}"
         
     
     - name: Install the provisioning profile
