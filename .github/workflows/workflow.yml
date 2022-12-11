@@ -247,8 +247,8 @@ jobs:
         #Build xArchive
         xcodebuild -workspace ios/Runner.xcworkspace -scheme Runner -configuration Release DEVELOPMENT_TEAM=$TEAM_IDENTIFIER -sdk 'iphoneos' -destination 'generic/platform=iOS' -archivePath build-output/app.xcarchive PROVISIONING_PROFILE=$UUID clean archive CODE_SIGN_IDENTITY="Apple Distribution: $TEAM_NAME ($TEAM_IDENTIFIER)"
         
-    - name: Export ipa
-      run: xcodebuild -exportArchive -archivePath build-output/app.xcarchive -exportPath build-output/ios -exportOptionsPlist ios/Runner/ExportOptions.plist
+  #  - name: Export ipa
+  #    run: xcodebuild -exportArchive -archivePath build-output/app.xcarchive -exportPath build-output/ios -exportOptionsPlist ios/Runner/ExportOptions.plist
 
 
 
@@ -267,8 +267,8 @@ jobs:
   
 
 #     # Build and sign the ipa using a single flutter command
-#     - name: Building IPA
-#       run: flutter build ipa --release --export-options-plist=ios/Runner/ExportOptions.plist
+    - name: Building IPA
+      run: flutter build ipa --release --export-options-plist=ios/Runner/ExportOptions.plist
 
     # Collect the file and upload as artifact         
     - name: collect ipa artifacts
