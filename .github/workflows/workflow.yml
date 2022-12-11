@@ -80,7 +80,6 @@ jobs:
         echo "$text" >  .env
         cat .env
     
-        
      #  Send email
     - name: Send mail
       uses: dawidd6/action-send-mail@v3
@@ -201,7 +200,6 @@ jobs:
         # apply provisioning profile
         mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
         cp $PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles
-     
      
     - name: Install the Apple certificate and provisioning profile
        run:|
