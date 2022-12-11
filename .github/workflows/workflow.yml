@@ -242,7 +242,7 @@ jobs:
         echo $TEAM_NAME
         echo $UUID
         #Build xArchive
-        xcodebuild -workspace ios/Runner.xcworkspace -scheme Runner -configuration Release DEVELOPMENT_TEAM=$TEAM_IDENTIFIER -sdk 'iphoneos' -destination 'generic/platform=iOS' -archivePath build-output/app.xcarchive PROVISIONING_PROFILE=$UUID clean archive CODE_SIGN_IDENTITY="$TEAM_NAME"
+        xcodebuild -workspace ios/Runner.xcworkspace -scheme Runner -configuration Release DEVELOPMENT_TEAM=$TEAM_IDENTIFIER -sdk 'iphoneos' -destination 'generic/platform=iOS' -archivePath build-output/app.xcarchive PROVISIONING_PROFILE=$UUID clean archive CODE_SIGN_IDENTITY="Apple Distribution: $TEAM_NAME ($TEAM_IDENTIFIER)"
         
     - name: Export ipa
       run: xcodebuild -exportArchive -archivePath build-output/app.xcarchive -exportPath build-output/ios -exportOptionsPlist ios/ExportOptions.plist
