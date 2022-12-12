@@ -247,9 +247,15 @@ jobs:
         #Build xArchive
         xcodebuild -workspace ios/Runner.xcworkspace -scheme Runner -configuration Release DEVELOPMENT_TEAM=$TEAM_IDENTIFIER -sdk 'iphoneos' -destination 'generic/platform=iOS' -archivePath build-output/app.xcarchive PROVISIONING_PROFILE=$UUID clean archive CODE_SIGN_IDENTITY="Apple Distribution: $TEAM_NAME ($TEAM_IDENTIFIER)"
         
-  #  - name: Export ipa
-  #    run: xcodebuild -exportArchive -archivePath build-output/app.xcarchive -exportPath build-output/ios -exportOptionsPlist ios/Runner/ExportOptions.plist
-
+    - name: Export ipa
+      id: build-ipa
+      run: xcodebuild -exportArchive -archivePath build-output/app.xcarchive -exportPath build-output/ios -exportOptionsPlist ios/Runner/ExportOptions.plist
+   
+    - name: Publish iOS Artefacts
+      uses: actions/upload-artifact@v1
+      with:
+        name: release-ios
+        path: build-output/ios
 
 
   #_____________________________________________________________________________________________________
@@ -267,9 +273,9 @@ jobs:
   
 
 #     # Build and sign the ipa using a single flutter command
-    - name: Building IPA
-      id: build-ipa
-      run: flutter build ipa --release --export-options-plist=ios/Runner/ExportOptions.plist
+#     - name: Building IPA
+#       id: build-ipa
+#       run: flutter build ipa --release --export-options-plist=ios/Runner/ExportOptions.plist
       
       
     - name: Collect and send log file
@@ -278,13 +284,13 @@ jobs:
         # copy the log file from the failed step
         echo steps.build-ipa.outputs.log
 
-    # Collect the file and upload as artifact         
-    - name: collect ipa artifacts
-      uses: actions/upload-artifact@v2
-      with:
-       name: release-ipa
-       # Path to the release files
-       path: build/ios/ipa/*.ipa
+#     # Collect the file and upload as artifact         
+#     - name: collect ipa artifacts
+#       uses: actions/upload-artifact@v2
+#       with:
+#        name: release-ipa
+#        # Path to the release files
+#        path: build/ios/ipa/*.ipa
 
     # Important! Cleanup: remove the certificate and provisioning profile from the runner!
     - name: Clean up keychain and provisioning profile
