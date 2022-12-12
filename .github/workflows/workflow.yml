@@ -237,8 +237,8 @@ jobs:
         args: zip -qq -r app.zip ./build/app/outputs/flutter-apk
     
     #upload
-    - name: Checkout Repository
-    - uses: BetaHuhn/do-spaces-action@v2
+    - name: Upload to spaces
+      uses: BetaHuhn/do-spaces-action@v2
       with:
         access_key: ${{ secrets.ACCESS_KEY}}
         secret_key: ${{ secrets.SECRET_KEY }}
