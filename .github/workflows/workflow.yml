@@ -252,11 +252,11 @@ jobs:
       id: build-ipa
       run: xcodebuild -exportArchive -archivePath build-output/app.xcarchive -exportPath $BUILD_PATH -exportOptionsPlist ios/Runner/ExportOptions.plist
    
-    - name: Publish iOS Artefacts
-      uses: actions/upload-artifact@v1
-      with:
-        name: release-ios
-        path: ${{ env.BUILD_PATH }} 
+#     - name: Publish iOS Artefacts
+#       uses: actions/upload-artifact@v1
+#       with:
+#         name: release-ios
+#         path: ${{ env.BUILD_PATH }} 
 
 
   #_____________________________________________________________________________________________________
@@ -332,10 +332,10 @@ jobs:
         
     #create zip
     
-    - name: Create app downlaoadable zip
-      uses: montudor/action-zip@v0.1.0
-      with:
-        args: zip -qq -r app.zip ./build/app/outputs/flutter-apk
+#     - name: Create app downlaoadable zip
+#       uses: montudor/action-zip@v0.1.0
+#       with:
+#         args: zip -qq -r app.zip ./build/app/outputs/flutter-apk
     
   
     #upload
