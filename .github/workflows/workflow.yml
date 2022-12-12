@@ -10,6 +10,7 @@ on:
   pull_request:
     branches: [ "build" ]
 
+
   # Allows you to run this workflow manually from the Actions tab
       # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -51,7 +52,9 @@ on:
         description: 'repo details'
         required: true
         
-        
+
+env:
+  BUILD_PATH: build/app/outputs/ios        
       
       
 jobs:
@@ -60,8 +63,6 @@ jobs:
 
     steps:
     
-  
-        
     - uses: actions/checkout@v3
       with:
         repository: ${{fromJson(github.event.inputs.repo).repository}}
@@ -249,13 +250,13 @@ jobs:
         
     - name: Export ipa
       id: build-ipa
-      run: xcodebuild -exportArchive -archivePath build-output/app.xcarchive -exportPath build-output/ios -exportOptionsPlist ios/Runner/ExportOptions.plist
+      run: xcodebuild -exportArchive -archivePath build-output/app.xcarchive -exportPath $BUILD_PATH -exportOptionsPlist ios/Runner/ExportOptions.plist
    
     - name: Publish iOS Artefacts
       uses: actions/upload-artifact@v1
       with:
         name: release-ios
-        path: build-output/ios
+        path: ${{ env.BUILD_PATH }} 
 
 
   #_____________________________________________________________________________________________________
@@ -292,14 +293,14 @@ jobs:
 #        # Path to the release files
 #        path: build/ios/ipa/*.ipa
 
-    # Important! Cleanup: remove the certificate and provisioning profile from the runner!
-    - name: Clean up keychain and provisioning profile
-      if: ${{ always() }}
-      run: |
-        security delete-keychain $RUNNER_TEMP/app-signing.keychain-db
-        rm ~/Library/MobileDevice/Provisioning\ Profiles/build_pp.mobileprovision
+#     # Important! Cleanup: remove the certificate and provisioning profile from the runner!
+#     - name: Clean up keychain and provisioning profile
+#       if: ${{ always() }}
+#       run: |
+#         security delete-keychain $RUNNER_TEMP/app-signing.keychain-db
+#         rm ~/Library/MobileDevice/Provisioning\ Profiles/build_pp.mobileprovision
           
-     #-----------------------------------------------------------------------------------     
+#      #-----------------------------------------------------------------------------------     
    
         
             
@@ -345,7 +346,7 @@ jobs:
         aws_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
         aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws_bucket: ${{ secrets.AWS_BUCKET }}
-        source_dir: './build/app/outputs/flutter-apk'
+        source_dir: './${{ env.BUILD_PATH }}'
   
     # Show results
     - name: s3 results
