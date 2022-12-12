@@ -240,10 +240,10 @@ jobs:
     - name: Upload to spaces
       uses: BetaHuhn/do-spaces-action@v2
       with:
-        access_key: ${{ secrets.ACCESS_KEY}}
-        secret_key: ${{ secrets.SECRET_KEY }}
-        space_name: ${{ secrets.SPACE_NAME }}
-        space_region: ${{ secrets.SPACE_REGION }}
+        access_key: ${{ secrets.DO_ACCESS_KEY}}
+        secret_key: ${{ secrets.DO_SECRET_KEY }}
+        space_name: ${{ secrets.DO_SPACE_NAME }}
+        space_region: ${{ secrets.DO_SPACE_REGION }}
         source: './build/app/outputs/flutter-apk'
         out_dir: ${{ github.event.inputs.appBundleId }}
         
