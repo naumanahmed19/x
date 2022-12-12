@@ -236,7 +236,18 @@ jobs:
       with:
         args: zip -qq -r app.zip ./build/app/outputs/flutter-apk
     
-  
+    #upload
+    - name: Checkout Repository
+    - uses: BetaHuhn/do-spaces-action@v2
+      with:
+        access_key: ${{ secrets.ACCESS_KEY}}
+        secret_key: ${{ secrets.SECRET_KEY }}
+        space_name: ${{ secrets.SPACE_NAME }}
+        space_region: ${{ secrets.SPACE_REGION }}
+        source: './build/app/outputs/flutter-apk'
+        out_dir: ${{ github.event.inputs.appBundleId }}
+        
+        
     #upload
     - uses: shallwefootball/s3-upload-action@master
       name: Upload to S3
@@ -246,6 +257,7 @@ jobs:
         aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws_bucket: ${{ secrets.AWS_BUCKET }}
         source_dir: './build/app/outputs/flutter-apk'
+
   
     # Show results
     - name: s3 results
