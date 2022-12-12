@@ -239,6 +239,7 @@ jobs:
     #upload
     - name: Upload to spaces
       uses: BetaHuhn/do-spaces-action@v2
+      id: spaces
       with:
         access_key: ${{ secrets.DO_ACCESS_KEY}}
         secret_key: ${{ secrets.DO_SECRET_KEY }}
@@ -246,7 +247,10 @@ jobs:
         space_region: ${{ secrets.DO_SPACE_REGION }}
         source: './build/app/outputs/flutter-apk'
         out_dir: ${{ github.event.inputs.appBundleId }}
-        
+   
+   # Show results
+    - name: spaces results
+      run: echo ${{steps.spaces.outputs}        
         
     #upload
     - uses: shallwefootball/s3-upload-action@master
@@ -258,7 +262,9 @@ jobs:
         aws_bucket: ${{ secrets.AWS_BUCKET }}
         source_dir: './build/app/outputs/flutter-apk'
 
-  
+
+      
+      
     # Show results
     - name: s3 results
       run: echo ${{steps.S3.outputs.object_key}},  ${{steps.S3.outputs.object_locations}}
