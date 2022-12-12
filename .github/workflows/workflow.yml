@@ -250,8 +250,18 @@ jobs:
    
    # Show results
     - name: spaces results
-      run: echo ${{steps.spaces.outputs}}        
-        
+      run: echo ${{steps.spaces.outputs.output_url}}        
+    
+    - name: update deployment status
+      if: always()
+      uses: altinukshini/deployment-status@releases/v1
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        state: ${{ job.status }}
+        deployment_id: ${{ steps.deployment.outputs.deployment_id }}
+        environment_url: ${{steps.spaces.outputs.output_url}}
+        description: "Successfully uploaded files to DO Spaces"
+          
     #upload
     - uses: shallwefootball/s3-upload-action@master
       name: Upload to S3
