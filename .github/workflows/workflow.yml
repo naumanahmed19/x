@@ -250,7 +250,7 @@ jobs:
    
    # Show results
     - name: spaces results
-      run: echo ${{steps.spaces.outputs}        
+      run: echo ${{steps.spaces.outputs}}        
         
     #upload
     - uses: shallwefootball/s3-upload-action@master
