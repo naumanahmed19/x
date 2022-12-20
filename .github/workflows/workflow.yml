@@ -250,10 +250,13 @@ jobs:
    
    # Show results
     - name: spaces results
-      run: 
+      run: |
+        echo "test: ${{ steps.spaces.outputs}}"
+        echo "The URL of the uploaded file is: ${{ steps.build.outputs.DigitalOcean_Spaces_URL}}"
         echo ${{steps.spaces.outputs.output_url}}   
         echo ${{ job.status }}
     
+ 
 #     - name: update deployment status
 #       if: always()
 #       uses: altinukshini/deployment-status@releases/v1
