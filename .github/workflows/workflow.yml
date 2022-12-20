@@ -52,7 +52,11 @@ on:
         required: true
         
         
-      
+env:
+  BUILD_PATH_BUNDLE: './build/app/outputs/bundle/release'
+  BUILD_PATH_APK: './build/app/outputs/flutter-apk'
+  
+
       
 jobs:
   build:
@@ -235,7 +239,7 @@ jobs:
     - name: Create app downlaoadable zip
       uses: montudor/action-zip@v0.1.0
       with:
-        args: zip -qq -r app.zip ./build/app/outputs/flutter-apk
+        args: zip -qq -r app.zip ${{ env.BUILD_PATH_BUNDLE }}
     
     #upload
     - name: Upload to spaces
@@ -246,7 +250,7 @@ jobs:
         secret_key: ${{ secrets.DO_SECRET_KEY }}
         space_name: ${{ secrets.DO_SPACE_NAME }}
         space_region: ${{ secrets.DO_SPACE_REGION }}
-        source: './build/app/outputs/flutter-apk'
+        source: ${{ env.BUILD_PATH_BUNDLE }}
         out_dir: 'builds/${{ github.event.inputs.appBundleId }}'
    
 
@@ -278,7 +282,7 @@ jobs:
         aws_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
         aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws_bucket: ${{ secrets.AWS_BUCKET }}
-        source_dir: './build/app/outputs/flutter-apk'
+        source_dir: ${{ env.BUILD_PATH_BUNDLE }}
 
 
       
