@@ -248,24 +248,13 @@ jobs:
         source: './build/app/outputs/flutter-apk'
         out_dir: 'builds/${{ github.event.inputs.appBundleId }}'
    
-  
-    - name: Sync to DigitalOcean Space
-      uses: aws-actions/s3-sync-action@v1
-      with:
-        access_key_id: ${{ secrets.DO_ACCESS_KEY }}
-        secret_access_key: ${{ secrets.DO_SECRET_KEY }}
-        region: ${{ secrets.DO_SPACE_NAME }}
-        bucket_name: ${{ secrets.DO_SPACE_NAME }}
-        source: './build/app/outputs/flutter-apk'
-        destination: 'builds/${{ github.event.inputs.appBundleId }}'
-        endpoint: https://nyc3.digitaloceanspaces.com
-        
+
    # Show results
     - name: spaces results
       run: |
         echo "The URL of the uploaded file is: ${{steps.spaces}}"
         echo "test: ${{ steps.spaces.outputs}}"
-        echo "The URL of the uploaded file is: ${{ steps.build.outputs.DigitalOcean_Spaces_URL}}"
+        echo "The URL of the uploaded file is: ${{steps.spaces.outputs.output_url}}"
         echo ${{steps.spaces.outputs.output_url}}   
         echo ${{ job.status }}
     
