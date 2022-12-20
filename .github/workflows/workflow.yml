@@ -246,21 +246,23 @@ jobs:
         space_name: ${{ secrets.DO_SPACE_NAME }}
         space_region: ${{ secrets.DO_SPACE_REGION }}
         source: './build/app/outputs/flutter-apk'
-        out_dir: ${{ github.event.inputs.appBundleId }}
+        out_dir: 'builds/${{ github.event.inputs.appBundleId }}'
    
    # Show results
     - name: spaces results
-      run: echo ${{steps.spaces.outputs.output_url}}        
+      run: 
+        echo ${{steps.spaces.outputs.output_url}}   
+        echo ${{ job.status }}
     
-    - name: update deployment status
-      if: always()
-      uses: altinukshini/deployment-status@releases/v1
-      with:
-        token: ${{ secrets.GITHUB_TOKEN }}
-        state: ${{ job.status }}
-        deployment_id: ${{ steps.deployment.outputs.deployment_id }}
-        environment_url: ${{steps.spaces.outputs.output_url}}
-        description: "Successfully uploaded files to DO Spaces"
+#     - name: update deployment status
+#       if: always()
+#       uses: altinukshini/deployment-status@releases/v1
+#       with:
+#         token: ${{ secrets.GITHUB_TOKEN }}
+#         state: ${{ job.status }}
+#         deployment_id: ${{ steps.deployment.outputs.deployment_id }}
+#         environment_url: ${{steps.spaces.outputs.output_url}}
+#         description: "Successfully uploaded files to DO Spaces"
           
     #upload
     - uses: shallwefootball/s3-upload-action@master
