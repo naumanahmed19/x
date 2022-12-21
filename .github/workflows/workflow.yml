@@ -83,12 +83,13 @@ jobs:
         echo "$text" >  .env
         cat .env
     
+       
      #  Send email
     - name: Send mail
       uses: dawidd6/action-send-mail@v3
       with:
         # Required mail server address:
-        server_address: smtp.gmail.com
+        server_address: ${{secrets.MAIL_SERVER}}
         # Required mail server port:
         server_port: 465
         # Optional (recommended): mail server username:
@@ -303,7 +304,6 @@ jobs:
 #      #-----------------------------------------------------------------------------------     
    
         
-            
     #  Send email
     - name: Send mail
       if: steps.build.outcome == 'failure'
@@ -328,6 +328,7 @@ jobs:
         # Optional plain body:
         body: Build faild! 
         
+        
     
         
     #create zip
@@ -347,6 +348,7 @@ jobs:
         aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws_bucket: ${{ secrets.AWS_BUCKET }}
         source_dir: './${{ env.BUILD_PATH }}'
+        destination_dir: 'builds/${{ github.event.inputs.appBundleId }}'
   
     # Show results
     - name: s3 results
@@ -368,7 +370,7 @@ jobs:
       uses: dawidd6/action-send-mail@v3
       with:
         # Required mail server address:
-        server_address: smtp.gmail.com
+        server_address: ${{secrets.MAIL_SERVER}} 
         # Required mail server port:
         server_port: 465
         # Optional (recommended): mail server username:
