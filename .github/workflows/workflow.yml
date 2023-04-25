@@ -241,18 +241,6 @@ jobs:
       with:
         args: zip -qq -r app.zip ${{ env.BUILD_PATH_BUNDLE }}
     
-    #upload
-    - name: Upload to spaces
-      uses: BetaHuhn/do-spaces-action@v2
-      id: spaces
-      with:
-        access_key: ${{ secrets.DO_ACCESS_KEY}}
-        secret_key: ${{ secrets.DO_SECRET_KEY }}
-        space_name: ${{ secrets.DO_SPACE_NAME }}
-        space_region: ${{ secrets.DO_SPACE_REGION }}
-        source: ${{ env.BUILD_PATH_BUNDLE }}
-        out_dir: 'builds/${{ github.event.inputs.appBundleId }}'
-   
 
    # Show results
     - name: spaces results
