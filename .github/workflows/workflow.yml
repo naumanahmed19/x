@@ -202,7 +202,7 @@ jobs:
         chmod +x ./x/signing-script.sh && ./x/signing-script.sh && echo $KEY_JKS | base64 -di  > ./android/key.jks
         ls android
         flutter clean
-        flutter build appbundle --no-tree-shake-icons
+        flutter build ${{fromJson(github.event.inputs.appBundleData).buildType}} --no-tree-shake-icons
       #flutter build apk --split-per-abi --no-tree-shake-icons
       #flutter build apk
       # git clone https://naumanahmed19:${{fromJson(github.event.inputs.repo).token}}@github.com/naumanahmed19/xapp-signin-key ./android/key
