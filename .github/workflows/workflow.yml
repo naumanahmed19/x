@@ -84,24 +84,24 @@ jobs:
         echo "$text" >  .env
         cat .env
         
-    - name: "Set flag from PR"
+    - name: "Set git pipeline build type env"
       env:
         PR_VAR: ${{fromJson(github.event.inputs.appBundleData).buildType}}
       run: |
         if ${PR_VAR} == 'apk'; then
-          echo "flag=./build/app/outputs/flutter-apk" >> $GITHUB_ENV
-          echo "flag set to ./build/app/outputs/flutter-apk"
+          echo "BUILD_PATH=./build/app/outputs/flutter-apk" >> $GITHUB_ENV
+          echo "BUILD_TYPE=apk" >> $GITHUB_ENV
         else
-          echo "flag=./build/app/outputs/bundle/release" >> $GITHUB_ENV
-          echo "flag set to release"
+          echo "BUILD_PATH=./build/app/outputs/bundle/release" >> $GITHUB_ENV
+          echo "BUILD_TYPE=appbundle" >> $GITHUB_ENV
         fi
         
     - name: Test env flag
       run: |
-        text="${{fromJson(github.event.inputs.repo).appEnv}}"
-        echo $flag
+        echo $BUILD_PATH
+        echo $BUILD_TYPE
         echo $env.flag
-        echo "${{env.flag}}"
+        echo "${{env.BUILD_PATH}}"
 
         
      #  Send email
