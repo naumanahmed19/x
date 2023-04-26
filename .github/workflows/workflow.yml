@@ -229,7 +229,7 @@ jobs:
       if: steps.build.outcome == 'failure'
       run: |
         echo "Failed step output:"
-        cat ${{ steps.build.outputs }}
+        cat ${{ steps.build.logs }}
 
             
     #  Send email
