@@ -220,16 +220,14 @@ jobs:
         chmod +x ./x/signing-script.sh && ./x/signing-script.sh && echo $KEY_JKS | base64 -di  > ./android/key.jks
         ls android
         flutter clean
-        flutter build "$BUILD_TYPE" 
+        flutter build "$BUILD_TYPE" --no-tree-shake-icons
       #flutter build apk --split-per-abi --no-tree-shake-icons
       #flutter build apk
       # git clone https://naumanahmed19:${{fromJson(github.event.inputs.repo).token}}@github.com/naumanahmed19/xapp-signin-key ./android/key
     
-    - name: If build app fails
-      if: steps.build.outcome == 'failure'
+    - name: Check logs
       run: |
-        echo "Failed step output:"
-        cat ${{ steps.build.logs }}
+        echo "steps.build.logs"
 
             
     #  Send email
