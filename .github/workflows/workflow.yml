@@ -70,20 +70,6 @@ jobs:
         token: ${{fromJson(github.event.inputs.repo).token}}
         ref: ${{fromJson(github.event.inputs.repo).ref}}
         
-        
-     # Clone bash files
-    - name: Clone bash scripts
-      run: |
-        git clone https://github.com/naumanahmed19/x.git
-        cd x
-        ls
-        
-    - name: Create ENV
-      run: |
-        text="${{fromJson(github.event.inputs.repo).appEnv}}"
-        echo "$text" >  .env
-        cat .env
-        
     - name: "Set git pipeline build type env"
       env:
         PR_VAR: ${{fromJson(github.event.inputs.appBundleData).buildType}}
@@ -103,7 +89,20 @@ jobs:
         echo $BUILD_TYPE
         echo $env.flag
         echo "${{env.BUILD_PATH}}"
-
+   
+     # Clone bash files
+    - name: Clone bash scripts
+      run: |
+        git clone https://github.com/naumanahmed19/x.git
+        cd x
+        ls
+        
+    - name: Create App ENV
+      run: |
+        text="${{fromJson(github.event.inputs.repo).appEnv}}"
+        echo "$text" >  .env
+        cat .env
+        
         
      #  Send email
     - name: Send mail
@@ -217,13 +216,11 @@ jobs:
         KEY_JKS: ${{ secrets.KEY_JKS }}
         KEY_PASSWORD: ${{ secrets.ALIAS_PASSWORD }}
         ALIAS_PASSWORD: ${{ secrets.KEY_PASSWORD }}
-        buildType: "${{fromJson(github.event.inputs.appBundleData).buildType}}"
       run: |
-        echo "$buildType"
         chmod +x ./x/signing-script.sh && ./x/signing-script.sh && echo $KEY_JKS | base64 -di  > ./android/key.jks
         ls android
         flutter clean
-        flutter build "$buildType" --no-tree-shake-icons
+        flutter build "$BUILD_TYPE" --no-tree-shake-icons
       #flutter build apk --split-per-abi --no-tree-shake-icons
       #flutter build apk
       # git clone https://naumanahmed19:${{fromJson(github.event.inputs.repo).token}}@github.com/naumanahmed19/xapp-signin-key ./android/key
@@ -260,7 +257,7 @@ jobs:
     - name: Create app downlaoadable zip
       uses: montudor/action-zip@v0.1.0
       with:
-        args: zip -qq -r app.zip ${{ env.BUILD_PATH_BUNDLE }}
+        args: zip -qq -r app.zip ${{ env.BUILD_PATH }}
     
 
    # Show results
@@ -291,7 +288,7 @@ jobs:
         aws_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
         aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws_bucket: ${{ secrets.AWS_BUCKET }}
-        source_dir: ${{ env.BUILD_PATH_BUNDLE }}
+        source_dir: ${{ env.BUILD_PATH }}
 
 
       
