@@ -89,7 +89,7 @@ jobs:
         PR_VAR: ${{fromJson(github.event.inputs.appBundleData).buildType}}
       run: |
         echo "${{fromJson(github.event.inputs.appBundleData).buildType}}"
-        if ${PR_VAR} == apk; then
+        if [ "${PR_VAR}" == "apk" ]; then
           echo "BUILD_PATH=./build/app/outputs/flutter-apk" >> $GITHUB_ENV
           echo "BUILD_TYPE=apk" >> $GITHUB_ENV
         else
