@@ -231,7 +231,6 @@ jobs:
       run: |
         echo "Failed step output:"
         cat ${{ steps.build.outputs }}
-        cat ${{ steps.build.outputs.<output_name> }}
 
             
     #  Send email
