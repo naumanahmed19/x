@@ -224,7 +224,15 @@ jobs:
       #flutter build apk --split-per-abi --no-tree-shake-icons
       #flutter build apk
       # git clone https://naumanahmed19:${{fromJson(github.event.inputs.repo).token}}@github.com/naumanahmed19/xapp-signin-key ./android/key
-        
+    
+    - name: If build app fails
+      if: ${{ failure() }}
+      continue-on-error: true
+      run: |
+        echo "Failed step output:"
+        cat ${{ steps.build.outputs }}
+        cat ${{ steps.build.outputs.<output_name> }}
+
             
     #  Send email
     - name: Send mail
