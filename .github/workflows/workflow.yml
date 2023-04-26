@@ -226,8 +226,7 @@ jobs:
       # git clone https://naumanahmed19:${{fromJson(github.event.inputs.repo).token}}@github.com/naumanahmed19/xapp-signin-key ./android/key
     
     - name: If build app fails
-      if: ${{ failure() }}
-      continue-on-error: true
+      if: steps.build.outcome == 'failure'
       run: |
         echo "Failed step output:"
         cat ${{ steps.build.outputs }}
