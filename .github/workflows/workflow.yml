@@ -262,7 +262,7 @@ jobs:
     - name: Create app downlaoadable zip
       uses: montudor/action-zip@v0.1.0
       with:
-        args: zip -qq -r ${{APP_NAME}}.zip ${{ env.BUILD_PATH }}
+        args: zip -qq -r ${{env.APP_NAME}}.zip ${{ env.BUILD_PATH }}
  
       
 
@@ -270,7 +270,7 @@ jobs:
     - name: spaces results
       run: |
         mkdir upload
-        zip -qq -r upload/${{APP_NAME}}.zip ${{ env.BUILD_PATH }}
+        zip -qq -r upload/$APP_NAME.zip $BUILD_PATH
         ls
 
     #upload
