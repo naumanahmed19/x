@@ -55,6 +55,7 @@ on:
 env:
   BUILD_PATH_BUNDLE: './build/app/outputs/bundle/release'
   BUILD_PATH_APK: './build/app/outputs/flutter-apk'
+  APP_NAME: "${{ github.event.inputs.appName }}"
 
       
 jobs:
@@ -261,29 +262,17 @@ jobs:
     - name: Create app downlaoadable zip
       uses: montudor/action-zip@v0.1.0
       with:
-        args: zip -qq -r app.zip ${{ env.BUILD_PATH }}
-    
+        args: zip -qq -r ${{APP_NAME}}.zip ${{ env.BUILD_PATH }}
+ 
+      
 
    # Show results
     - name: spaces results
       run: |
-        echo "The URL of the uploaded file is: ${{steps.spaces}}"
-        echo "test: ${{ steps.spaces.outputs}}"
-        echo "The URL of the uploaded file is: ${{steps.spaces.outputs.output_url}}"
-        echo ${{steps.spaces.outputs.output_url}}   
-        echo ${{ job.status }}
-    
- 
-#     - name: update deployment status
-#       if: always()
-#       uses: altinukshini/deployment-status@releases/v1
-#       with:
-#         token: ${{ secrets.GITHUB_TOKEN }}
-#         state: ${{ job.status }}
-#         deployment_id: ${{ steps.deployment.outputs.deployment_id }}
-#         environment_url: ${{steps.spaces.outputs.output_url}}
-#         description: "Successfully uploaded files to DO Spaces"
-          
+        mkdir upload
+        zip -qq -r upload/${{APP_NAME}}.zip ${{ env.BUILD_PATH }}
+        ls
+
     #upload
     - uses: shallwefootball/s3-upload-action@master
       name: Upload to S3
@@ -292,24 +281,20 @@ jobs:
         aws_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
         aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws_bucket: ${{ secrets.AWS_BUCKET }}
-        source_dir: ${{ env.BUILD_PATH }}
+        source_dir: upload
 
-
-      
-      
     # Show results
     - name: s3 results
       run: echo ${{steps.S3.outputs.object_key}},  ${{steps.S3.outputs.object_locations}}
       
-      
-      
+
     - name: Update Build Status with files
       uses: fjogeleit/http-request-action@v1
       with:
         url: '${{ github.event.inputs.buildStatusCallBackUrl }}'
         method: 'PATCH'
         customHeaders: '{"Content-Type": "application/json" , "Authorization": "Bearer ${{ secrets.XAPP_TOKEN }}"}'
-        data: '{"status": "success","workflowId": "${{ github.run_id }}" , "files": ${{ steps.S3.outputs.object_locations}} }'
+        data: '{"status": "success","workflowId": "${{ github.run_id }}" ,"s3ObjectKey": ${{steps.S3.outputs.object_key}} , "files": ${{ steps.S3.outputs.object_locations}} }'
 
      
      #  Send email
