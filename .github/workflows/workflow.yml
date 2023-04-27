@@ -294,7 +294,7 @@ jobs:
         url: '${{ github.event.inputs.buildStatusCallBackUrl }}'
         method: 'PATCH'
         customHeaders: '{"Content-Type": "application/json" , "Authorization": "Bearer ${{ secrets.XAPP_TOKEN }}"}'
-        data: '{"status": "success","workflowId": "${{ github.run_id }}" ,"s3ObjectKey": ${{steps.S3.outputs.object_key}} , "files": ${{ steps.S3.outputs.object_locations}} }'
+        data: '{"status": "success","workflowId": "${{ github.run_id }}" ,"s3Key": ${{steps.S3.outputs.object_key}} , "s3Url": ${{ steps.S3.outputs.object_locations}} }'
 
      
      #  Send email
