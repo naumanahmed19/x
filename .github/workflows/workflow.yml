@@ -104,30 +104,7 @@ jobs:
         echo "$text" >  .env
         cat .env
         
-        
-     #  Send email
-    - name: Send mail
-      uses: dawidd6/action-send-mail@v3
-      with:
-        # Required mail server address:
-        server_address: ${{secrets.MAIL_SERVER}}
-        # Required mail server port:
-        server_port: 465
-        # Optional (recommended): mail server username:
-        username: ${{secrets.MAIL_USERNAME}}
-        # Optional (recommended) mail server password:
-        password: ${{secrets.MAIL_PASSWORD}}
-        # Required mail subject:
-        subject: xapp build started for ${{ github.event.inputs.appName }}
-        # Required recipients' addresses:
-        to: ${{ github.event.inputs.userEmail }}
-        # Required sender full name (address can be skipped):
-        from: xapp # <xapp@app.com>
-        # Optional whether this connection use TLS (default is true if server_port is 465)
-        secure: true
-        # Optional plain body:
-        body: A build has been started for ${{ github.event.inputs.appName}}
-   
+    
    
     - name: Update Workflow Id
       uses: fjogeleit/http-request-action@v1
@@ -288,7 +265,7 @@ jobs:
       run: echo ${{steps.S3.outputs.object_key}},  ${{steps.S3.outputs.object_locations}}
       
 
-    - name: Update Build Status with files
+    - name: Update Build Status with files & send user email from nest
       uses: fjogeleit/http-request-action@v1
       with:
         url: '${{ github.event.inputs.buildStatusCallBackUrl }}'
@@ -296,30 +273,7 @@ jobs:
         customHeaders: '{"Content-Type": "application/json" , "Authorization": "Bearer ${{ secrets.XAPP_TOKEN }}"}'
         data: '{"status": "success","workflowId": "${{ github.run_id }}" ,"s3Key": "${{steps.S3.outputs.object_key}}" , "s3Url": ${{ steps.S3.outputs.object_locations}} }'
 
-     
-     #  Send email
-    - name: Send mail
-      uses: dawidd6/action-send-mail@v3
-      with:
-        # Required mail server address:
-        server_address: ${{secrets.MAIL_SERVER}} 
-        # Required mail server port:
-        server_port: 465
-        # Optional (recommended): mail server username:
-        username: ${{secrets.MAIL_USERNAME}}
-        # Optional (recommended) mail server password:
-        password: ${{secrets.MAIL_PASSWORD}}
-        # Required mail subject:
-        subject: XAPP - Build Completed for ${{ github.event.inputs.appName }}
-        # Required recipients' addresses:
-        to: ${{ github.event.inputs.userEmail }}
-        # Required sender full name (address can be skipped):
-        from: Xapp # <Xapp@app.com>
-        # Optional whether this connection use TLS (default is true if server_port is 465)
-        secure: true
-        # Optional plain body:
-        body: Build completed successfully! please download your app from ${{steps.S3.outputs.object_locations}}
-        
+   
         
     - name: If workflow fails
       uses: fjogeleit/http-request-action@v1
