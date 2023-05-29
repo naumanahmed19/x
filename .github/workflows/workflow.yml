@@ -226,7 +226,7 @@ jobs:
        
     - name: Build Flutter
       run:  |
-        pod install --repo-update
+        cd ios && pod install --repo-update && cd..
         flutter build ios --release --no-codesign --no-tree-shake-icons
       
     - name: Build resolve Swift dependencies
