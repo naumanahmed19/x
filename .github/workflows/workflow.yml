@@ -166,14 +166,14 @@ jobs:
         ls
         rm -rf .git
     
-    - name: Push
-      uses: s0/git-publish-subdir-action@develop
-      env:
-        REPO:  git@github.com:naumanahmed19/mybrand-flutter.git
-        BRANCH: build # The branch name where you want to push the assets
-        FOLDER: . # The directory where your assets are generated
-        SSH_PRIVATE_KEY: ${{ secrets.DEPLOY_PRIVATE_KEY }}
-        MESSAGE: "Build: ${{ github.event.inputs.appName }} - ({sha}) {msg}" # The commit message
+#     - name: Push
+#       uses: s0/git-publish-subdir-action@develop
+#       env:
+#         REPO:  git@github.com:naumanahmed19/mybrand-flutter.git
+#         BRANCH: build # The branch name where you want to push the assets
+#         FOLDER: . # The directory where your assets are generated
+#         SSH_PRIVATE_KEY: ${{ secrets.DEPLOY_PRIVATE_KEY }}
+#         MESSAGE: "Build: ${{ github.event.inputs.appName }} - ({sha}) {msg}" # The commit message
         
         
     ########################################################################################    
@@ -304,30 +304,7 @@ jobs:
 #      #-----------------------------------------------------------------------------------     
    
         
-    #  Send email
-    - name: Send mail
-      if: steps.build.outcome == 'failure'
-      uses: dawidd6/action-send-mail@v3
-      with:
-        # Required mail server address:
-        server_address: smtp.gmail.com
-        # Required mail server port:
-        server_port: 465
-        # Optional (recommended): mail server username:
-        username: ${{secrets.MAIL_USERNAME}}
-        # Optional (recommended) mail server password:
-        password: ${{secrets.MAIL_PASSWORD}}
-        # Required mail subject:
-        subject: xapp build failed for ${{ github.event.inputs.appName }}
-        # Required recipients' addresses:
-        to: ${{ github.event.inputs.userEmail }}
-        # Required sender full name (address can be skipped):
-        from: Xapp # <Xapp@app.com>
-        # Optional whether this connection use TLS (default is true if server_port is 465)
-        secure: true
-        # Optional plain body:
-        body: Build faild! 
-        
+
         
     
         
@@ -362,31 +339,8 @@ jobs:
         url: '${{ github.event.inputs.buildStatusCallBackUrl }}'
         method: 'PATCH'
         customHeaders: '{"Content-Type": "application/json" , "Authorization": "Bearer ${{ secrets.XAPP_TOKEN }}"}'
-        data: '{"status": "success","workflowId": "${{ github.run_id }}" , "files": ${{ steps.S3.outputs.object_locations}} }'
+        data: '{"status": "success","workflowId": "${{ github.run_id }}" ,"s3Key": "${{steps.S3.outputs.object_key}}", "files": ${{ steps.S3.outputs.object_locations}} }'
 
-     
-     #  Send email
-    - name: Send mail
-      uses: dawidd6/action-send-mail@v3
-      with:
-        # Required mail server address:
-        server_address: ${{secrets.MAIL_SERVER}} 
-        # Required mail server port:
-        server_port: 465
-        # Optional (recommended): mail server username:
-        username: ${{secrets.MAIL_USERNAME}}
-        # Optional (recommended) mail server password:
-        password: ${{secrets.MAIL_PASSWORD}}
-        # Required mail subject:
-        subject: XAPP - Build Completed for ${{ github.event.inputs.appName }}
-        # Required recipients' addresses:
-        to: ${{ github.event.inputs.userEmail }}
-        # Required sender full name (address can be skipped):
-        from: Xapp # <Xapp@app.com>
-        # Optional whether this connection use TLS (default is true if server_port is 465)
-        secure: true
-        # Optional plain body:
-        body: Build completed successfully! please download your app from ${{steps.S3.outputs.object_locations}}
         
         
     - name: If workflow fails
