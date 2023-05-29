@@ -225,7 +225,9 @@ jobs:
        
        
     - name: Build Flutter
-      run: flutter build ios --release --no-codesign --no-tree-shake-icons
+      run:  |
+        pod repo update
+        flutter build ios --release --no-codesign --no-tree-shake-icons
       
     - name: Build resolve Swift dependencies
       run: xcodebuild -resolvePackageDependencies -workspace ios/Runner.xcworkspace -scheme Runner -configuration Release
